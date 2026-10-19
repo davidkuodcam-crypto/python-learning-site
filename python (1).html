@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python 零基礎入門講義｜旗艦互動版</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            neon: {
+              cyan: '#06b6d4',
+              emerald: '#10b981',
+              purple: '#8b5cf6',
+              amber: '#f59e0b',
+              rose: '#f43f5e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+    body {
+      font-family: 'Noto Sans TC', 'Inter', sans-serif;
+      background-color: #0b0f19;
+      color: #e2e8f0;
+    }
+    code, pre, .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .neon-card {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      box-shadow: 0 4px 25px -2px rgba(6, 182, 212, 0.08);
+      transition: all 0.25s ease;
+    }
+    .neon-card:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: 0 8px 30px -4px rgba(6, 182, 212, 0.16);
+    }
+    .nav-active {
+      background: linear-gradient(90deg, rgba(6, 182, 212, 0.2) 0%, rgba(139, 92, 246, 0.05) 100%);
+      border-left: 4px solid #06b6d4;
+      color: #38bdf8 !important;
+      font-weight: 600;
+    }
+    .step-badge {
+      background: linear-gradient(135deg, #06b6d4, #6366f1);
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-950">
+
+  <!-- 頂部導覽列 -->
+  <header class="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-cyan-500/20 px-4 lg:px-8 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 font-mono font-bold text-white text-lg">
+          Py
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg md:text-xl font-bold tracking-wide text-white">Python 零基礎入門講義</h1>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 font-mono">CH01-CH04 旗艦完整版 (含 85 題認證題庫)</span>
+          </div>
+          <p class="text-xs text-slate-400">Spyder 實戰環境 × 視覺化運算拆解 × 迴圈結構 × GLAD ICTP 全範圍隨堂即測即評</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- 影片互動練習模式按鈕 -->
+        <button onclick="toggleModal('videoModal')" class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 border border-purple-500/30 text-xs sm:text-sm font-medium transition">
+          <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>影片斷點跳題練習</span>
+        </button>
+
+        <!-- 下載範例資源包 -->
+        <button onclick="downloadSampleScript()" class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs sm:text-sm shadow-lg shadow-cyan-500/20 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          <span>下載範例套件 (.py)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主體容器 -->
+  <div class="max-w-7xl w-full mx-auto flex-1 flex flex-col lg:flex-row gap-8 px-4 lg:px-8 py-8">
+    
+    <!-- 左側 Scrollspy 動態導覽目錄 -->
+    <aside class="lg:w-64 shrink-0">
+      <div class="lg:sticky lg:top-24 neon-card rounded-2xl p-4 space-y-5">
+        <div>
+          <h2 class="text-xs font-mono uppercase tracking-wider text-cyan-400 mb-3 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            章節導覽目錄 (Scrollspy)
+          </h2>
+          <nav id="scrollspy-nav" class="space-y-1 text-sm">
+            <a href="#ch1" data-section="ch1" class="nav-link nav-active block px-3 py-2.5 rounded-r-lg text-slate-300 hover:text-cyan-300 transition">
+              CH01｜程式基礎與開發環境
+            </a>
+            <div class="pl-4 space-y-1 text-xs text-slate-400 border-l border-slate-800 ml-3">
+              <a href="#ch1-spyder" class="block py-1 hover:text-cyan-400">1.1 語言特性、演算法與 Spyder</a>
+              <a href="#ch1-io" class="block py-1 hover:text-cyan-400">1.2 基本輸出入、註解與格式化</a>
+              <a href="#ch1-quiz" class="block py-1 hover:text-cyan-400">1.3 CH01 認證隨堂測驗</a>
+            </div>
+
+            <a href="#ch2" data-section="ch2" class="nav-link block px-3 py-2.5 rounded-r-lg text-slate-300 hover:text-cyan-300 transition mt-2">
+              CH02｜資料型態與運算子
+            </a>
+            <div class="pl-4 space-y-1 text-xs text-slate-400 border-l border-slate-800 ml-3">
+              <a href="#ch2-types" class="block py-1 hover:text-cyan-400">2.1 變數命名、型態與轉型陷阱</a>
+              <a href="#ch2-precedence" class="block py-1 hover:text-cyan-400">2.2 運算子優先順序與位元/複合運算</a>
+              <a href="#ch2-compound" class="block py-1 hover:text-cyan-400">2.3 實作：fund_growth.py</a>
+              <a href="#ch2-quiz" class="block py-1 hover:text-cyan-400">2.4 CH02 認證隨堂測驗</a>
+            </div>
+
+            <a href="#ch3" data-section="ch3" class="nav-link block px-3 py-2.5 rounded-r-lg text-slate-300 hover:text-cyan-300 transition mt-2">
+              CH03｜條件判斷與流程控制
+            </a>
+            <div class="pl-4 space-y-1 text-xs text-slate-400 border-l border-slate-800 ml-3">
+              <a href="#ch3-ifelse" class="block py-1 hover:text-cyan-400">3.1 縮排、ASCII 比較與分支結構</a>
+              <a href="#ch3-nested" class="block py-1 hover:text-cyan-400">3.2 經典範例：密碼、等第與折扣</a>
+              <a href="#ch3-sensor" class="block py-1 hover:text-cyan-400">3.3 進階實作：智慧感測器預警</a>
+              <a href="#ch3-quiz" class="block py-1 hover:text-cyan-400">3.4 CH03 認證隨堂測驗</a>
+            </div>
+
+            <a href="#ch4" data-section="ch4" class="nav-link block px-3 py-2.5 rounded-r-lg text-slate-300 hover:text-amber-300 transition mt-2">
+              CH04｜迴圈結構 (range/for/while)
+            </a>
+            <div class="pl-4 space-y-1 text-xs text-slate-400 border-l border-slate-800 ml-3">
+              <a href="#ch4-range" class="block py-1 hover:text-amber-400">4.1 range() 函式與互動產生器</a>
+              <a href="#ch4-for" class="block py-1 hover:text-amber-400">4.2 for 迴圈、巢狀迴圈與九九乘法</a>
+              <a href="#ch4-break" class="block py-1 hover:text-amber-400">4.3 break / continue 與 while 迴圈</a>
+              <a href="#ch4-advanced" class="block py-1 hover:text-amber-400">4.4 獨家實戰範例 (5 大進階主題)</a>
+              <a href="#ch4-quiz" class="block py-1 hover:text-amber-400">4.5 CH04 認證隨堂測驗</a>
+            </div>
+
+            <a href="#all-exams" data-section="all-exams" class="nav-link block px-3 py-2.5 rounded-r-lg text-rose-300 hover:text-rose-200 transition mt-2 bg-rose-500/10 border border-rose-500/20">
+              🏆 CH01-04 認證全真題庫 (85題)
+            </a>
+          </nav>
+        </div>
+
+        <!-- 學習進度統計 -->
+        <div class="pt-4 border-t border-slate-800 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-400">總題庫完成進度</span>
+            <span id="quiz-progress-text" class="font-mono text-cyan-400 font-bold">0 / 85 題</span>
+          </div>
+          <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+            <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-cyan-500 via-emerald-400 to-amber-400 transition-all duration-300" style="width: 0%"></div>
+          </div>
+          <div class="flex justify-between items-center text-xs text-slate-400 pt-1">
+            <span>答對題數：<strong id="quiz-correct-count" class="text-emerald-400 font-mono">0</strong></span>
+            <span>目前正確率：<strong id="quiz-accuracy" class="text-amber-300 font-mono">0%</strong></span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 右側講義主要內容區 -->
+    <main class="flex-1 space-y-12 min-w-0">
+
+      <!-- ==========================================
+           CH01：Python 程式基礎與開發環境
+           ========================================== -->
+      <section id="ch1" class="scroll-mt-24 space-y-6">
+        <div class="neon-card rounded-2xl p-6 sm:p-8 border-l-4 border-l-cyan-400">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="px-2.5 py-1 rounded-md bg-cyan-500/20 text-cyan-300 font-mono text-xs font-bold">CHAPTER 01</span>
+            <span class="text-xs text-slate-400">預計學習時間：50 分鐘</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">Python 程式基礎、運算思維與 Spyder 開發環境</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            本章帶領零基礎學習者掌握<strong class="text-cyan-300">運算思維（Computational Thinking）與演算法特性</strong>，認識 Python 直譯式語言優勢與 <strong class="text-cyan-300">Spyder IDE</strong> 開發環境，並透過實例徹底釐清註解寫法、<code class="text-amber-300">print()</code> / <code class="text-amber-300">input()</code> 輸出入、<code class="text-amber-300">.format()</code> 與 f-string 格式化，以及常見的數值與字串相加差異。
+          </p>
+        </div>
+
+        <!-- 1.1 Python 語言特性、運算思維與 Spyder IDE -->
+        <div id="ch1-spyder" class="neon-card rounded-2xl p-6 space-y-5 scroll-mt-24">
+          <h3 class="text-lg sm:text-xl font-bold text-cyan-300 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md step-badge text-white text-xs flex items-center justify-center font-mono">1.1</span>
+            語言世代、運算思維演算法與 Spyder IDE 實戰介面
+          </h3>
+
+          <!-- 補充：認證必考理論重點整理 -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-cyan-500/30 space-y-1.5">
+              <div class="text-cyan-400 font-mono font-bold">★ 程式語言分類與 Python 特性</div>
+              <ul class="list-disc list-inside text-slate-300 space-y-1 leading-relaxed">
+                <li><strong>語言階層</strong>：機器語言（最低階）➔ 組合語言（與硬體密切相關，非高階語言）➔ 高階語言（如 Python、C、Java，符合人類語意）。</li>
+                <li><strong>直譯式語言</strong>：Python 屬於<strong>直譯式（Interpreted）</strong>語言，跨平台、簡潔易讀、擴充性強（廣泛用於 AI、大數據、自動控制、遊戲設計）。</li>
+                <li><span class="text-rose-400 font-semibold">易錯陷阱</span>：Python <strong>沒有指標（Pointer）</strong>概念（C/C++ 才有指標）。</li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-emerald-500/30 space-y-1.5">
+              <div class="text-emerald-400 font-mono font-bold">★ 運算思維與演算法 (Algorithm)</div>
+              <ul class="list-disc list-inside text-slate-300 space-y-1 leading-relaxed">
+                <li><strong>運算思維 4 步驟</strong>：拆解 (Decomposition) ➔ 模式識別 (Pattern Recognition) ➔ 歸納抽象化 (Abstraction) ➔ <strong>演算法 (Algorithm，最終目標與核心關鍵)</strong>。</li>
+                <li><strong>演算法五大特性</strong>：輸入（0 或多個輸入）、輸出（<strong>至少 1 個輸出</strong>）、明確性（步驟清楚無歧義）、有效性（具體可行）、<strong>有限性（絕不允許無窮迴路！）</strong>。</li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-amber-500/30 space-y-1.5">
+              <div class="text-amber-400 font-mono font-bold">★ Python 註解與區塊縮排規範</div>
+              <ul class="list-disc list-inside text-slate-300 space-y-1 leading-relaxed">
+                <li><strong>單行註解</strong>：放在任何一行的井字號 <code class="text-amber-300">#</code> 之後（注意：Python 不支援 <code class="text-rose-400">//</code> 或 <code class="text-rose-400">/* */</code>）。</li>
+                <li><strong>多行字串/註解</strong>：使用成對的三重單引號 <code class="text-amber-300">'''...'''</code> 或三重雙引號 <code class="text-amber-300">"""..."""</code>，可固定多行輸出格式。</li>
+                <li><strong>程式碼層級區分</strong>：透過<strong>縮排（Indentation，1 個 Tab 或 4 個空白）</strong>區分區塊，若太長可用反斜線 <code class="text-cyan-300">\</code> 換行續寫。</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+              <div class="text-cyan-400 font-mono text-xs mb-1">LEFT PANEL</div>
+              <div class="font-bold text-white mb-2">程式碼編輯區 (Editor)</div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                撰寫並儲存 <code class="text-cyan-300">.py</code> 腳本檔案。支援語法高亮、自動 4 格縮排與即時語法檢查（Linter 提示）。
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-emerald-500/30">
+              <div class="text-emerald-400 font-mono text-xs mb-1">TOP-RIGHT PANEL ★必看</div>
+              <div class="font-bold text-white mb-2">變數瀏覽器 (Variable Explorer)</div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                即時監控記憶體中所有變數的<strong class="text-emerald-300">名稱 (Name)、資料型態 (Type)、大小 (Size) 與當前數值 (Value)</strong>，除錯超直覺！
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+              <div class="text-purple-400 font-mono text-xs mb-1">BOTTOM-RIGHT PANEL</div>
+              <div class="font-bold text-white mb-2">互動主控台 (IPython Console)</div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                顯示程式執行結果、接收使用者 <code class="text-purple-300">input()</code> 輸入，亦可單行測試運算式。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1.2 基本輸出入、字串接合與格式化補充範例 -->
+        <div id="ch1-io" class="neon-card rounded-2xl p-6 space-y-5 scroll-mt-24">
+          <h3 class="text-lg sm:text-xl font-bold text-cyan-300 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md step-badge text-white text-xs flex items-center justify-center font-mono">1.2</span>
+            基本輸出入 <code class="text-white">print()</code> / <code class="text-white">input()</code>、脫逸字元與字串/數值必考範例對照
+          </h3>
+
+          <!-- 認證必考：print 數值與字串易混淆範例表 -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="border-b border-slate-700 text-cyan-300 bg-slate-900/90">
+                  <th class="py-2.5 px-3">Python 程式碼範例</th>
+                  <th class="py-2.5 px-3">輸出結果</th>
+                  <th class="py-2.5 px-3">關鍵觀念解析（GLAD ICTP 必考）</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 text-slate-300">
+                <tr>
+                  <td class="py-2 px-3 font-mono text-amber-300">print('abc' + 'def')</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">abcdef</td>
+                  <td class="py-2 px-3">兩個字串使用 <code class="text-cyan-300">+</code> 會直接無縫串接（中間不會自動加空白）。</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono text-amber-300">print('1.0' + '2.0')</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">1.02.0</td>
+                  <td class="py-2 px-3">用引號包起來即為字串！字串相加是「文字拼接」而非數學加法。</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono text-amber-300">print('1.0+2.0')</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">1.0+2.0</td>
+                  <td class="py-2 px-3">整段算式在單引號內，視為純文字原封不動印出。</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono text-amber-300">print(5 * 'abc')</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">abcabcabcabcabc</td>
+                  <td class="py-2 px-3"><strong>整數 (int) × 字串 (str)</strong> 代表將字串重複印出 5 次。</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono text-rose-300">print(5.0 * 'abc')</td>
+                  <td class="py-2 px-3 font-mono text-rose-400">error (TypeError)</td>
+                  <td class="py-2 px-3"><strong class="text-rose-400">超級陷阱！</strong>浮點數 (<code class="text-rose-300">5.0</code>) 不可與字串相乘，會拋出 <code class="text-rose-300">TypeError</code>。</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono text-amber-300">print('({} + {}) ^ 2) = {}'.format(4, 3, 49))</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">(4 + 3) ^ 2) = 49</td>
+                  <td class="py-2 px-3"><code class="text-cyan-300">.format()</code> 會依序把括號內的參數填入字串中的 <code class="text-cyan-300">{}</code> 佔位符。</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-mono text-amber-300">chr(65) / ord('A')</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">'A' / 65</td>
+                  <td class="py-2 px-3"><code class="text-cyan-300">chr()</code> 將 ASCII 碼轉為對應字元；<code class="text-cyan-300">ord()</code> 將字元轉為 ASCII 數值。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs sm:text-sm">
+            <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800 space-y-2">
+              <div class="font-bold text-cyan-300">1. <code class="font-mono">print()</code> 參數與脫逸字元（Escape Sequence）</div>
+              <ul class="list-disc list-inside text-slate-300 space-y-1">
+                <li><code class="text-amber-300">sep=" "</code>：多個輸出項目之間的分隔字元（預設為空白）。</li>
+                <li><code class="text-amber-300">end="\n"</code>：輸出結尾字元（預設為換行 <code class="text-cyan-300">\n</code>，若設為 <code class="text-amber-300">end=""</code> 則不換行）。</li>
+                <li><strong class="text-rose-300">考題陷阱</strong>：字串分行顯示應加入 <code class="text-emerald-300">\n</code>（換行），而非 <code class="text-rose-400">\b</code>（倒退鍵 Backspace）！</li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800 space-y-2">
+              <div class="font-bold text-rose-300">2. <code class="font-mono">input()</code> 轉型與字串不可變性</div>
+              <ul class="list-disc list-inside text-slate-300 space-y-1">
+                <li><code class="text-rose-300">input()</code> 回傳值一律為 <strong class="text-white">字串 (<code class="text-amber-300">str</code>)</strong>！若題目要求「輸入數值並轉為整數計算」，標準寫法為 <code class="text-emerald-300">int(input("提示文字"))</code>。</li>
+                <li><strong>字串不可變（Immutable）</strong>：字串物件一旦配置，內容不可直接透過索引修改；尋找子字串索引可使用 <code class="text-cyan-300">find()</code>，分割字串使用 <code class="text-cyan-300">split()</code>，轉大寫使用 <code class="text-cyan-300">upper()</code>。</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 程式碼範例區塊 -->
+          <div class="rounded-xl overflow-hidden border border-slate-700/80 bg-slate-950">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                <span class="ml-2 text-xs font-mono text-slate-300">lab01_io_greeting.py（含註解規範、format 與切片補充範例）</span>
+              </div>
+              <button onclick="copyCode('code-ch1')" class="px-2.5 py-1 rounded bg-cyan-500/15 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 text-xs font-mono transition">
+                複製程式碼
+              </button>
+            </div>
+            <pre id="code-ch1" class="p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed"><code>'''
+多行註解示範：使用三個單引號或雙引號
+CH01 綜合範例：智慧實驗室報到與字串處理
+'''
+# 單行註解：放在 # 符號之後
+researcher_name = input("請輸入研究員姓名：")
+clearance_level = int(input("請輸入安全權限等級 (1~5)："))
+
+# 1. 使用 sep 與 end 自訂輸出格式
+print("[系統連線中]", "驗證憑證", "載入權限", sep=" >>> ", end=" ... 完成！\n")
+
+# 2. 使用 .format() 與 f-string 格式化輸出
+x, y = 4, 3
+result = x * x + 2 * x * y + y * y
+print('({} + {}) ^ 2) = {}'.format(x, y, result))  # 輸出：(4 + 3) ^ 2) = 49
+print(f"研究員：{researcher_name}\t授權等級：Level {clearance_level}")
+
+# 3. 字串索引、負數切片與常用方法 (認證必考)
+msg = 'Hello, World!'
+print("索引 1 的字元：", msg[1])          # 輸出：e (索引從 0 開始)
+print("負數切片 [-5:-2]：", msg[-5:-2])   # 輸出：orl (倒數第 5 到倒數第 3)
+print("字串長度 len()：", len(msg))       # 輸出：13 (含逗號、空白與驚嘆號)
+print("轉大寫 upper()：", msg.upper())    # 輸出：HELLO, WORLD!
+print("ASCII 65 對應字元：", chr(65))     # 輸出：A</code></pre>
+          </div>
+        </div>
+
+        <!-- 1.3 CH01 隨堂互動測驗 (由統一題庫引擎渲染) -->
+        <div id="ch1-quiz" class="neon-card rounded-2xl p-6 space-y-4 border border-cyan-500/30 scroll-mt-24">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded bg-cyan-500 text-slate-950 font-mono text-xs font-bold">CH01 QUIZ</span>
+              第 1 章：程式基礎、輸出入與字串 隨堂即測即評（共 21 題）
+            </h3>
+            <span class="text-xs text-cyan-300 font-mono">點擊選項立即批改並顯示標準答案與詳解</span>
+          </div>
+          <div id="quiz-container-ch1" class="space-y-3 max-h-[520px] overflow-y-auto pr-2"></div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           CH02：資料型態、運算式與運算子
+           ========================================== -->
+      <section id="ch2" class="scroll-mt-24 space-y-6">
+        <div class="neon-card rounded-2xl p-6 sm:p-8 border-l-4 border-l-emerald-400">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold">CHAPTER 02</span>
+            <span class="text-xs text-slate-400">預計學習時間：60 分鐘</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">資料型態、運算式與運算子優先順序</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            深入理解 Python <strong class="text-emerald-300">「動態型別、強型別」</strong>機制與變數命名規則，徹底分辨一般除法 <code class="text-amber-300">/</code>、整數除法 <code class="text-amber-300">//</code>、取餘數 <code class="text-amber-300">%</code> 與次方開根號 <code class="text-amber-300">** 0.5</code> 的輸出型態差異，並掌握複合指派與位元位移運算。
+          </p>
+        </div>
+
+        <!-- 2.1 變數命名、基本資料型態與算術型態提升規則 -->
+        <div id="ch2-types" class="neon-card rounded-2xl p-6 space-y-5 scroll-mt-24">
+          <h3 class="text-lg sm:text-xl font-bold text-emerald-300 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-emerald-500 text-slate-950 text-xs flex items-center justify-center font-mono font-bold">2.1</span>
+            變數命名規則、動態強型別與算術運算結果型態對照表
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-emerald-500/30 space-y-1.5">
+              <div class="text-emerald-400 font-mono font-bold">★ Python 變數命名與指派四大鐵則</div>
+              <ul class="list-disc list-inside text-slate-300 space-y-1 leading-relaxed">
+                <li><strong>不必事先宣告型態</strong>：使用等號 <code class="text-amber-300">=</code> 將右方資料指派給左方變數時即自動決定型態（但<strong>使用複合指派如 <code class="text-rose-300">x += 1</code> 前，變數 <code class="text-rose-300">x</code> 必須已事先設定初值！</strong>）。</li>
+                <li><strong>合法命名規則</strong>：可包含英文字母、數字、底線 <code class="text-cyan-300">_</code>，且<strong>支援中文變數名稱</strong>；<strong>第一個字元絕不能是數字</strong>，中間不可有空白，亦不可使用保留字（如 <code class="text-rose-300">if, for, def</code>）。</li>
+                <li><strong>區分大小寫</strong>：<code class="text-cyan-300">Score</code> 與 <code class="text-cyan-300">score</code> 視為兩個完全不同的變數。</li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-cyan-500/30 space-y-1.5">
+              <div class="text-cyan-400 font-mono font-bold">★ 為什麼 Python 是「動態型別、強型別」？</div>
+              <ul class="list-disc list-inside text-slate-300 space-y-1 leading-relaxed">
+                <li><strong>動態型別 (Dynamic Typing)</strong>：執行期間變數可隨時改變綁定的資料型態，不需事先宣告。</li>
+                <li><strong>強型別 (Strong Typing)</strong>：不容許不合理的隱式型態轉換（例如字串 <code class="text-amber-300">'1.0'</code> 與數字 <code class="text-amber-300">2</code> 直接相加會報 <code class="text-rose-400">TypeError</code>，必須明確轉型）。</li>
+                <li><strong>算術型態提升</strong>：當 <code class="text-cyan-300">int</code> 與 <code class="text-emerald-300">float</code> 混合運算時，結果一律自動提升為範圍較大的 <strong>浮點數 (<code class="text-emerald-300">float</code>)</strong>！</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 認證必考算術與複合運算範例對照表 -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="border-b border-slate-700 text-emerald-300 bg-slate-900/90">
+                  <th class="py-2.5 px-3">類別</th>
+                  <th class="py-2.5 px-3">Python 運算式範例</th>
+                  <th class="py-2.5 px-3">輸出結果</th>
+                  <th class="py-2.5 px-3">關鍵考點說明</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 text-slate-300">
+                <tr>
+                  <td class="py-2 px-3 font-medium text-white">浮點數加減乘</td>
+                  <td class="py-2 px-3 font-mono text-amber-300">1.0 + 2.0 ｜ 1.0 + 2 ｜ 5.0 * 2</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">3.0 ｜ 3.0 ｜ 10.0</td>
+                  <td class="py-2 px-3">只要任一運算元為 <code class="text-cyan-300">float</code>，結果必定帶 <code class="text-emerald-300">.0</code>（不會印出多餘的 <code class="text-slate-400">3.000000</code>）。</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-medium text-white">真除法 <code class="text-amber-300">/</code></td>
+                  <td class="py-2 px-3 font-mono text-amber-300">5 / 2 ｜ 5.0 / 2</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">2.5 ｜ 2.5</td>
+                  <td class="py-2 px-3">單斜線 <code class="text-amber-300">/</code> 永遠回傳<strong>浮點數 (float)</strong>，即使整除如 <code class="text-cyan-300">4 / 2</code> 也會輸出 <code class="text-emerald-300">2.0</code>。</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-medium text-white">整數除法 <code class="text-amber-300">//</code></td>
+                  <td class="py-2 px-3 font-mono text-amber-300">5 // 2 ｜ 5.0 // 2.0</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">2 ｜ 2.0</td>
+                  <td class="py-2 px-3">雙斜線 <code class="text-amber-300">//</code> 會捨去小數取整數商；但若含有浮點數如 <code class="text-cyan-300">5.0 // 2.0</code>，結果為浮點數 <code class="text-emerald-300">2.0</code>！</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-medium text-white">取餘數 <code class="text-amber-300">%</code></td>
+                  <td class="py-2 px-3 font-mono text-amber-300">15 % 4 ｜ 5.00 % 2.00</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">3 ｜ 1.0</td>
+                  <td class="py-2 px-3"><code class="text-amber-300">%</code> 是求餘數（非去掉小數！去掉小數是 <code class="text-cyan-300">//</code>）。<code class="text-cyan-300">math.fmod(5, 3)</code> 則回傳浮點數 <code class="text-emerald-300">2.0</code>。</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-medium text-white">次方與開根號 <code class="text-amber-300">**</code></td>
+                  <td class="py-2 px-3 font-mono text-amber-300">5**3 ｜ 9**0.5 ｜ 8**(1/3)</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">125 ｜ 3.0 ｜ 2.0</td>
+                  <td class="py-2 px-3"><code class="text-cyan-300">9**0.5</code> 為開平方根（因次方為 <code class="text-cyan-300">0.5</code> 浮點數，結果為 <code class="text-emerald-300">3.0</code>）；<code class="text-cyan-300">math.pow(4, 2)</code> 亦回傳 <code class="text-emerald-300">16.0</code>。</td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3 font-medium text-white">複合指派與位元位移</td>
+                  <td class="py-2 px-3 font-mono text-amber-300">x=5; x&=2 ｜ x=5; x&lt;&lt;=2</td>
+                  <td class="py-2 px-3 font-mono text-emerald-400">0 ｜ 20</td>
+                  <td class="py-2 px-3"><code class="text-cyan-300">5 (0101) &amp; 2 (0010) = 0</code>（位元 AND）；<code class="text-cyan-300">5 &lt;&lt; 2</code> 代表左移 2 位元，等同 $5 \times 2^2 = 20$。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2.2 運算子優先順序視覺化拆解 -->
+        <div id="ch2-precedence" class="neon-card rounded-2xl p-6 space-y-5 border border-emerald-500/30 scroll-mt-24">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-lg sm:text-xl font-bold text-emerald-300 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-emerald-500 text-slate-950 text-xs flex items-center justify-center font-mono font-bold">2.2</span>
+              運算子優先順序視覺化拆解與捷徑邏輯運算
+            </h3>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 font-mono">互動逐步拆解引擎</span>
+          </div>
+
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Python 運算優先順序由高至低為：<code class="text-white font-mono">括號 () ➔ 次方 ** ➔ 正負號 +x/-x (一元運算子) ➔ 乘除 * / // % ➔ 加減 + - ➔ 位元位移 &lt;&lt; &gt;&gt; ➔ 比較 &gt; &lt; == ➔ not ➔ and ➔ or</code>。<br>
+            例如認證考題：<code class="text-amber-300">(3 * (1 + 2) ** 3 - (2 ** 3) * 2)</code> ➔ 先算括號與次方得 <code class="text-cyan-300">3 * 27 - 8 * 2</code> ➔ 再算乘法得 <code class="text-cyan-300">81 - 16</code> ➔ 最終結果為 <strong class="text-emerald-400">65</strong>！<br>
+            此外，<code class="text-purple-300">and</code> 與 <code class="text-purple-300">or</code> 具備<strong>快捷運算（Short-circuit evaluation）</strong>特性：例如 <code class="text-amber-300">result = (48 % 6 == 0) and (24 % 4 == 0)</code> 因兩邊餘數皆為 0（皆為 <code class="text-emerald-300">True</code>），故 <code class="text-amber-300">result</code> 回傳 <strong class="text-emerald-400">True</strong>。
+          </p>
+
+          <!-- 視覺化拆解互動面板 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+              <div class="text-xs text-slate-400 font-mono">
+                感測器觸發條件表達式：<code class="text-cyan-300">alert_status = 5 + 3 * 2 &gt; 10 and not (8 // 3 == 2) or 2 ** 3 &lt;= 8</code>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="prevStep()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono transition">◀ 上一步</button>
+                <span id="step-counter" class="text-xs font-mono text-emerald-400 font-bold px-2">Step 1 / 6</span>
+                <button onclick="nextStep()" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs font-mono transition">下一步 ▶</button>
+              </div>
+            </div>
+
+            <div class="py-4 px-4 rounded-xl bg-slate-900/90 border border-emerald-500/20 text-center">
+              <div id="step-expr" class="font-mono text-base sm:text-xl text-white tracking-wide">
+                5 + <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">3 * 2</span> &gt; 10 and not (<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">8 // 3</span> == 2) or <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">2 ** 3</span> &lt;= 8
+              </div>
+            </div>
+
+            <div id="step-desc" class="text-xs sm:text-sm text-slate-300 bg-slate-900/50 p-3.5 rounded-xl border-l-4 border-emerald-400">
+              <strong>步驟 1（核心基礎測試 <code>5 + 3 * 2 &gt; 10</code> 與括號/次方優先）：</strong><br>
+              先計算括號內的整數除法 <code>8 // 3 = 2</code>、次方運算 <code>2 ** 3 = 8</code>，以及乘法 <code>3 * 2 = 6</code>（乘除優先於加減）。
+            </div>
+          </div>
+        </div>
+
+        <!-- 2.3 原創實作：fund_growth.py 研發基金複利成長試算 -->
+        <div id="ch2-compound" class="neon-card rounded-2xl p-6 space-y-5 scroll-mt-24">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-lg sm:text-xl font-bold text-emerald-300 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-emerald-500 text-slate-950 text-xs flex items-center justify-center font-mono font-bold">2.3</span>
+              原創實作：<code class="text-white font-mono">fund_growth.py</code> 研發基金複利成長試算
+            </h3>
+            <span class="text-xs text-slate-400">核心公式：$FV = PV \times (1 + r)^n$</span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <div class="lg:col-span-7 rounded-xl overflow-hidden border border-slate-700/80 bg-slate-950 flex flex-col">
+              <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
+                <span class="text-xs font-mono text-emerald-300">fund_growth.py</span>
+                <button onclick="copyCode('code-ch2')" class="px-2.5 py-1 rounded bg-emerald-500/15 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-mono transition">
+                  複製程式碼
+                </button>
+              </div>
+              <pre id="code-ch2" class="p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed flex-1"><code># fund_growth.py - 研發基金複利成長與複合指派實作
+principal = float(input("請輸入初始研發基金本金 (萬元)："))
+annual_rate_pct = float(input("請輸入預期年化報酬率 (%)："))
+years = int(input("請輸入複利累積年限 (年)："))
+
+rate = annual_rate_pct / 100
+final_amount = principal * ((1 + rate) ** years)
+net_growth = final_amount - principal
+is_target_met = final_amount >= (principal * 1.5)
+
+print("-" * 44)
+print(f"期末累積研發基金：{final_amount:.2f} 萬元")
+print(f"淨成長收益金額：  {net_growth:.2f} 萬元")
+print(f"是否達成 1.5 倍成長目標：{is_target_met}")</code></pre>
+            </div>
+
+            <div class="lg:col-span-5 p-5 rounded-xl bg-slate-900/90 border border-emerald-500/30 flex flex-col justify-between space-y-4">
+              <div>
+                <div class="text-xs font-mono text-emerald-400 uppercase mb-1">Interactive Simulator</div>
+                <h4 class="font-bold text-white text-base mb-3">研發基金複利即時試算器</h4>
+                <div class="space-y-3 text-xs">
+                  <div>
+                    <label class="block text-slate-300 mb-1">初始研發本金 <code class="text-cyan-300">principal</code> (萬元)：</label>
+                    <input id="sim-pv" type="number" value="500" oninput="runFundSimulator()" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white font-mono focus:border-emerald-400 outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-slate-300 mb-1">預期年化報酬率 <code class="text-cyan-300">annual_rate_pct</code> (%)：</label>
+                    <input id="sim-rate" type="number" step="0.5" value="6.5" oninput="runFundSimulator()" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white font-mono focus:border-emerald-400 outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-slate-300 mb-1">複利累積年限 <code class="text-cyan-300">years</code> (年)：</label>
+                    <input id="sim-years" type="number" value="8" oninput="runFundSimulator()" class="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white font-mono focus:border-emerald-400 outline-none" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-3.5 rounded-lg bg-slate-950 border border-slate-800 font-mono text-xs space-y-1.5">
+                <div class="text-slate-400">// IPython Console 模擬輸出結果</div>
+                <div>期末累積研發基金：<span id="sim-fv" class="text-emerald-400 font-bold text-sm">827.50</span> 萬元</div>
+                <div>淨成長收益金額：  <span id="sim-gain" class="text-cyan-400 font-bold">327.50</span> 萬元</div>
+                <div>達成 1.5 倍目標： <span id="sim-target" class="text-amber-300 font-bold">True</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2.4 CH02 隨堂互動測驗 -->
+        <div id="ch2-quiz" class="neon-card rounded-2xl p-6 space-y-4 border border-emerald-500/30 scroll-mt-24">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded bg-emerald-500 text-slate-950 font-mono text-xs font-bold">CH02 QUIZ</span>
+              第 2 章：資料型態、算術與邏輯運算子 隨堂即測即評（共 32 題）
+            </h3>
+            <span class="text-xs text-emerald-300 font-mono">點擊選項立即批改並顯示標準答案與詳解</span>
+          </div>
+          <div id="quiz-container-ch2" class="space-y-3 max-h-[520px] overflow-y-auto pr-2"></div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           CH03：條件判斷與流程控制
+           ========================================== -->
+      <section id="ch3" class="scroll-mt-24 space-y-6">
+        <div class="neon-card rounded-2xl p-6 sm:p-8 border-l-4 border-l-purple-400">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 font-mono text-xs font-bold">CHAPTER 03</span>
+            <span class="text-xs text-slate-400">預計學習時間：60 分鐘</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">條件判斷與流程控制 (<code class="text-purple-300 font-mono">if / elif / else</code> 與巢狀判斷)</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            本章完整涵蓋單向判斷式（<code class="text-purple-300">if</code>）、雙向判斷式（<code class="text-purple-300">if...else</code>）、多向判斷式（<code class="text-purple-300">if...elif...else</code>）與<strong>巢狀判斷式（Nested if）</strong>，並補充認證常考的<strong>字元 ASCII 大小比較</strong>、奇偶數判斷與百貨折扣實作。
+          </p>
+        </div>
+
+        <!-- 3.1 單向、雙向、多向分支與字元比較規則 -->
+        <div id="ch3-ifelse" class="neon-card rounded-2xl p-6 space-y-4 scroll-mt-24">
+          <h3 class="text-lg sm:text-xl font-bold text-purple-300 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-purple-500 text-white text-xs flex items-center justify-center font-mono font-bold">3.1</span>
+            縮排規範、字元 ASCII 比較與條件分支結構
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+              <div class="font-bold text-cyan-300 text-sm">1. 冒號 <code class="text-amber-300">:</code> 與 4 格縮排</div>
+              <p class="text-slate-300 leading-relaxed">
+                Python 以冒號 <code class="text-amber-300">:</code> 與縮排（1 個 Tab 或 4 個空白鍵）表示程式區塊。若同一區塊縮排不一致會拋出 <code class="text-rose-400">IndentationError</code>。
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-purple-500/30 space-y-2">
+              <div class="font-bold text-purple-300 text-sm">2. ★認證必考：字串與數值比較</div>
+              <ul class="list-disc list-inside text-slate-300 space-y-1">
+                <li><code class="text-amber-300">5 &gt; 2.0</code> ➔ <code class="text-emerald-400">True</code>（整數與浮點數可直接比大小）。</li>
+                <li><code class="text-amber-300">'5' &gt; '2'</code> ➔ <code class="text-emerald-400">True</code>；<code class="text-amber-300">'b' &gt; 'a'</code> ➔ <code class="text-emerald-400">True</code>。</li>
+                <li><code class="text-amber-300">'5' &gt; 'a'</code> ➔ <strong class="text-rose-400">False</strong>（ASCII 碼：數字 <code class="text-cyan-300">'0'~'9'</code> 為 48~57，大寫 <code class="text-cyan-300">'A'~'Z'</code> 為 65~90，小寫 <code class="text-cyan-300">'a'~'z'</code> 為 97~122，故 <code class="text-cyan-300">'5' (53) &lt; 'a' (97)</code>）。</li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+              <div class="font-bold text-emerald-300 text-sm">3. 奇偶數與連鎖比較</div>
+              <p class="text-slate-300 leading-relaxed">
+                判斷偶數使用 <code class="text-amber-300">if num % 2 == 0:</code>；判斷三數相等支援連鎖比較 <code class="text-amber-300">if x == y == z:</code>。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3.2 課本經典範例實作：密碼判斷、成績等第、百貨公司折扣戰 -->
+        <div id="ch3-nested" class="neon-card rounded-2xl p-6 space-y-5 scroll-mt-24">
+          <h3 class="text-lg sm:text-xl font-bold text-purple-300 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-purple-500 text-white text-xs flex items-center justify-center font-mono font-bold">3.2</span>
+            CH03 核心範例集：密碼驗證、成績等第與百貨週年慶折扣戰（含互動計算機）
+          </h3>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <div class="lg:col-span-7 rounded-xl overflow-hidden border border-slate-700/80 bg-slate-950">
+              <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
+                <span class="text-xs font-mono text-purple-300">ch03_classic_examples.py (password / grade / discount)</span>
+                <button onclick="copyCode('code-ch3-classic')" class="px-2.5 py-1 rounded bg-purple-500/15 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 text-xs font-mono transition">
+                  複製程式碼
+                </button>
+              </div>
+              <pre id="code-ch3-classic" class="p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed"><code># 範例 1：雙向判斷式 (password2.py) - 通關密碼驗證
+pwd = input("請輸入密碼：")
+if pwd == "1234":
+    print("歡迎光臨！")
+else:
+    print("密碼錯誤！")
+
+# 範例 2：多向判斷式 (grade.py) - 學生評量成績等第
+score = int(input("請輸入成績："))
+if score >= 90:
+    print("優等")
+elif score >= 80:
+    print("甲等")
+elif score >= 70:
+    print("乙等")
+elif score >= 60:
+    print("丙等")
+else:
+    print("丁等")
+
+# 範例 3：巢狀判斷式 (discount.py) - 百貨公司週年慶折扣戰
+money = int(input("請輸入購物金額："))
+if money >= 10000:
+    if money >= 100000:
+        pay = money * 0.8   # 10萬元以上打八折
+    elif money >= 50000:
+        pay = money * 0.85  # 5萬元以上打八五折
+    elif money >= 30000:
+        pay = money * 0.9   # 3萬元以上打九折
+    else:
+        pay = money * 0.95  # 1萬元以上打九五折
+else:
+    pay = money             # 未滿1萬元不打折
+print(f"應付金額：{pay} 元")</code></pre>
+            </div>
+
+            <!-- 互動模擬器：成績等第與百貨折扣即時測試 -->
+            <div class="lg:col-span-5 p-5 rounded-xl bg-slate-900/90 border border-purple-500/30 flex flex-col justify-between space-y-4">
+              <div class="space-y-4">
+                <div>
+                  <div class="text-xs font-mono text-purple-400 uppercase mb-1">Interactive Branch Tester</div>
+                  <h4 class="font-bold text-white text-base">成績等第 ＆ 百貨折扣模擬器</h4>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
+                  <label class="block text-slate-300">測試 <code class="text-purple-300">grade.py</code> 輸入成績 (0~100)：</label>
+                  <div class="flex items-center gap-3">
+                    <input id="sim-score" type="number" value="86" min="0" max="100" oninput="runCh3Simulator()" class="w-28 px-3 py-1.5 rounded bg-slate-900 border border-slate-700 text-white font-mono" />
+                    <span class="text-slate-400">➔ 評量結果：</span>
+                    <span id="sim-grade-out" class="px-2.5 py-1 rounded bg-purple-500/20 text-purple-300 font-bold font-mono">甲等</span>
+                  </div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
+                  <label class="block text-slate-300">測試 <code class="text-purple-300">discount.py</code> 購物金額 (元)：</label>
+                  <input id="sim-money" type="number" step="5000" value="80000" oninput="runCh3Simulator()" class="w-full px-3 py-1.5 rounded bg-slate-900 border border-slate-700 text-white font-mono" />
+                  <div class="pt-1 flex justify-between text-slate-300 font-mono">
+                    <span>適用折扣：<strong id="sim-disc-rate" class="text-amber-300">85 折 (滿 5 萬)</strong></span>
+                    <span>實付：<strong id="sim-disc-pay" class="text-emerald-400 text-sm">68000.0 元</strong></span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-xs text-slate-400 leading-relaxed">
+                💡 觀察重點：在巢狀判斷式中，外層 <code class="text-purple-300">if money &gt;= 10000:</code> 先過濾是否達到折扣門檻，內層再由高至低依序判斷 10萬、5萬、3萬區間。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3.3 原創實作：智慧感測器預警系統 -->
+        <div id="ch3-sensor" class="neon-card rounded-2xl p-6 space-y-5 scroll-mt-24">
+          <h3 class="text-lg sm:text-xl font-bold text-purple-300 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-purple-500 text-white text-xs flex items-center justify-center font-mono font-bold">3.3</span>
+            進階原創實作：<code class="text-white font-mono">sensor_monitor.py</code> 智慧機房感測器分級預警
+          </h3>
+
+          <div class="rounded-xl overflow-hidden border border-slate-700/80 bg-slate-950">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
+              <span class="text-xs font-mono text-purple-300">sensor_monitor.py（多向條件與複合邏輯實戰）</span>
+              <button onclick="copyCode('code-ch3')" class="px-2.5 py-1 rounded bg-purple-500/15 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 text-xs font-mono transition">
+                複製程式碼
+              </button>
+            </div>
+            <pre id="code-ch3" class="p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed"><code># sensor_monitor.py - 伺服器機房溫濕度感測器分級預警系統
+temp = float(input("請輸入機房當前溫度 (°C)："))
+humidity = float(input("請輸入機房相對濕度 (%)："))
+
+if temp >= 35 or humidity >= 85:
+    alert_level = "RED (緊急警報)"
+    action = "立即啟動備用冷卻系統並發送簡訊通知管理員！"
+elif temp >= 28 or humidity >= 70:
+    alert_level = "AMBER (中度預警)"
+    action = "自動調降空調設定溫度 2°C 並提高排風轉速。"
+elif 18 <= temp < 28 and 40 <= humidity < 70:
+    alert_level = "GREEN (運作正常)"
+    action = "環境指標處於最佳區間，維持恆溫節能模式。"
+else:
+    alert_level = "BLUE (低溫/乾燥提醒)"
+    action = "溫度或濕度偏低，請留意靜電防護機制。"
+
+print(f"診斷燈號：{alert_level}\n處置建議：{action}")</code></pre>
+          </div>
+        </div>
+
+        <!-- 3.4 CH03 隨堂互動測驗 -->
+        <div id="ch3-quiz" class="neon-card rounded-2xl p-6 space-y-4 border border-purple-500/30 scroll-mt-24">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded bg-purple-500 text-white font-mono text-xs font-bold">CH03 QUIZ</span>
+              第 3 章：條件判斷式與流程控制 隨堂即測即評（共 12 題）
+            </h3>
+            <span class="text-xs text-purple-300 font-mono">點擊選項立即批改並顯示標準答案與詳解</span>
+          </div>
+          <div id="quiz-container-ch3" class="space-y-3 max-h-[520px] overflow-y-auto pr-2"></div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           CH04：迴圈結構 (range / for / while)
+           ========================================== -->
+      <section id="ch4" class="scroll-mt-24 space-y-6">
+        <div class="neon-card rounded-2xl p-6 sm:p-8 border-l-4 border-l-amber-400">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 font-mono text-xs font-bold">CHAPTER 04 (NEW!)</span>
+            <span class="text-xs text-slate-400">預計學習時間：75 分鐘</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3">迴圈結構：<code class="text-amber-300 font-mono">range()</code>、<code class="text-amber-300 font-mono">for</code> 迴圈與 <code class="text-amber-300 font-mono">while</code> 迴圈</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Python 專門用來處理重複執行事件的命令稱為「迴圈」。本章完整收錄第 4 章教材的 <strong class="text-amber-300"><code>range()</code> 整數數列產生器</strong>、固定次數的 <strong class="text-amber-300"><code>for</code> 迴圈与巢狀迴圈</strong>、流程跳躍指令 <strong class="text-amber-300"><code>break</code> / <code>continue</code></strong>，以及不固定次數的 <strong class="text-amber-300"><code>while</code> 條件迴圈</strong>，並額外設計 <strong>5 個附件沒有的原創實務好範例</strong>！
+          </p>
+        </div>
+
+        <!-- 4.1 range() 函式與互動數列產生器 -->
+        <div id="ch4-range" class="neon-card rounded-2xl p-6 space-y-5 scroll-mt-24">
+          <h3 class="text-lg sm:text-xl font-bold text-amber-300 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-amber-500 text-slate-950 text-xs flex items-center justify-center font-mono font-bold">4.1</span>
+            認識 <code class="text-white">range()</code> 函式：建立整數循序數列
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+              <div class="font-mono text-amber-400 font-bold">1. 單一參數：range(終止值)</div>
+              <p class="text-slate-300 leading-relaxed">
+                從 <code class="text-cyan-300">0</code> 開始，每次遞增 <code class="text-cyan-300">1</code>（預設增減值為 1），直到<strong>「終止值 - 1」</strong>為止（不包含終止值本身！）。<br>
+                例如：<code class="text-amber-300">range(5)</code> ➔ <code class="text-emerald-400">0, 1, 2, 3, 4</code>
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+              <div class="font-mono text-amber-400 font-bold">2. 雙參數：range(起始值, 終止值)</div>
+              <p class="text-slate-300 leading-relaxed">
+                從「起始值」開始到「終止值 - 1」，預設每次加 1（可為負整數）。<br>
+                例如：<code class="text-amber-300">range(2, 8)</code> ➔ <code class="text-emerald-400">[2, 3, 4, 5, 6, 7]</code><br>
+                例如：<code class="text-amber-300">range(-2, 4)</code> ➔ <code class="text-emerald-400">[-2, -1, 0, 1, 2, 3]</code>
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-amber-500/30 space-y-1.5">
+              <div class="font-mono text-amber-400 font-bold">3. 三參數：range(起始, 終止, 間隔)</div>
+              <p class="text-slate-300 leading-relaxed">
+                若間隔值為負數（遞減），<strong>起始值必須大於終止值</strong>，否則會產生空數列！<br>
+                例如：<code class="text-amber-300">range(8, 3, -1)</code> ➔ <code class="text-emerald-400">[8, 7, 6, 5, 4]</code><br>
+                <span class="text-rose-400">陷阱</span>：<code class="text-rose-300">range(2, 5, -2)</code> ➔ 起始 &lt; 終止卻遞減，<strong>不顯示任何內容（空數列）</strong>！
+              </p>
+            </div>
+          </div>
+
+          <!-- range() 互動實驗室 -->
+          <div class="p-5 rounded-2xl bg-slate-950 border border-amber-500/30 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="text-xs font-mono text-amber-400 font-bold">⚡ range(start, stop, step) 即時視覺化測試器</div>
+              <div class="flex flex-wrap gap-1.5 text-xs font-mono">
+                <button onclick="setRangePreset(0, 10, 1)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300">range(10)</button>
+                <button onclick="setRangePreset(2, 8, 1)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300">range(2, 8)</button>
+                <button onclick="setRangePreset(5, 1, -2)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300">range(5, 1, -2)</button>
+                <button onclick="setRangePreset(2, 5, -2)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-rose-300">陷阱: range(2, 5, -2)</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-3 text-xs">
+              <div>
+                <label class="block text-slate-400 mb-1">起始值 (start)：</label>
+                <input id="rng-start" type="number" value="1" oninput="updateRangeVisualizer()" class="w-full px-3 py-1.5 rounded bg-slate-900 border border-slate-700 text-white font-mono" />
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">終止值 (stop，不含)：</label>
+                <input id="rng-stop" type="number" value="10" oninput="updateRangeVisualizer()" class="w-full px-3 py-1.5 rounded bg-slate-900 border border-slate-700 text-white font-mono" />
+              </div>
+              <div>
+                <label class="block text-slate-400 mb-1">間隔值 (step，不可為0)：</label>
+                <input id="rng-step" type="number" value="2" oninput="updateRangeVisualizer()" class="w-full px-3 py-1.5 rounded bg-slate-900 border border-slate-700 text-white font-mono" />
+              </div>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs sm:text-sm">
+              <div class="text-slate-400 mb-1">執行 <span id="rng-code-label" class="text-amber-300">list(range(1, 10, 2))</span> 產生的數列結果：</div>
+              <div id="rng-output" class="text-emerald-400 font-bold text-base break-all">[1, 3, 5, 7, 9] （共 5 個元素）</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4.2 for 迴圈與巢狀 for 迴圈 (含課本範例) -->
+        <div id="ch4-for" class="neon-card rounded-2xl p-6 space-y-5 scroll-mt-24">
+          <h3 class="text-lg sm:text-xl font-bold text-amber-300 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-amber-500 text-slate-950 text-xs flex items-center justify-center font-mono font-bold">4.2</span>
+            <code class="text-white">for</code> 固定次數迴圈與巢狀迴圈（累加總和、直角三角形、九九乘法表）
+          </h3>
+
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <code class="text-amber-300">for 變數 in 數列:</code> 可依序走訪任何序列項目（如 <code class="text-cyan-300">range()</code> 或串列 <code class="text-cyan-300">['apple', 'banana']</code>）。當迴圈內又包含另一個迴圈時稱為<strong>巢狀迴圈（Nested Loop）</strong>，注意<strong>內外層迴圈結構必須完整包覆，絕對不可交錯！</strong>
+          </p>
+
+          <div class="rounded-xl overflow-hidden border border-slate-700/80 bg-slate-950">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
+              <span class="text-xs font-mono text-amber-300">ch04_for_loops.py（課本核心實作：numshow / numtotal / fornest / ninenine）</span>
+              <button onclick="copyCode('code-ch4-for')" class="px-2.5 py-1 rounded bg-amber-500/15 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-mono transition">
+                複製程式碼
+              </button>
+            </div>
+            <pre id="code-ch4-for" class="p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed"><code># 1. 顯示正整數數列 (numshow.py) 與計算 1 到 n 總和 (numtotal.py)
+n = int(input("請輸入正整數："))
+total = 0
+for i in range(1, n + 1):
+    print(i, end=" ")
+    total += i
+print(f"\n1 到 {n} 的整數和為 {total}")
+
+# 2. 巢狀 for 迴圈：井字/星號直角三角形 (fornest.py 與認證必考題對照)
+# 寫法 A：內層 range(0, x)，第 1~5 行分別印出 1, 2, 3, 4, 5 顆星
+for x in range(1, 6):
+    for y in range(0, x):
+        print("*", end="")
+    print("")  # 換行
+
+# 寫法 B (認證陷阱題)：內層 range(1, x)，當 x=1 時 range(1,1) 為空，只印出空行與 1~4 顆星！
+for x in range(1, 6):
+    for y in range(1, x):
+        print("*", end="")
+    print("")
+
+# 3. 巢狀 for 迴圈：九九乘法表 (ninenine.py)
+for i in range(1, 10):
+    for j in range(1, 10):
+        print(f"{i}*{j}={i*j:<2}", end=" ")
+    print()</code></pre>
+          </div>
+        </div>
+
+        <!-- 4.3 break / continue 與 while 迴圈 -->
+        <div id="ch4-break" class="neon-card rounded-2xl p-6 space-y-5 scroll-mt-24">
+          <h3 class="text-lg sm:text-xl font-bold text-amber-300 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-md bg-amber-500 text-slate-950 text-xs flex items-center justify-center font-mono font-bold">4.3</span>
+            <code class="text-white">break</code> / <code class="text-white">continue</code> 控制命令與 <code class="text-white">while</code> 條件迴圈
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-rose-500/30 space-y-1.5">
+              <div class="font-mono text-rose-400 font-bold text-sm">break（強制跳離整個迴圈）</div>
+              <p class="text-slate-300 leading-relaxed">
+                在迴圈執行中途一旦遇到 <code class="text-rose-300">break</code>，會<strong>立刻終止並跳出該層迴圈</strong>，繼續執行迴圈後方的程式。常用於「找到第一個符合條件的值（如最小公倍數、最大公因數）即刻停止」。
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-cyan-500/30 space-y-1.5">
+              <div class="font-mono text-cyan-400 font-bold text-sm">continue（跳過當次、繼續下一輪）</div>
+              <p class="text-slate-300 leading-relaxed">
+                遇到 <code class="text-cyan-300">continue</code> 時，會<strong>略過當次迴圈下方尚未執行的敘述</strong>，直接跳回迴圈開頭進行下一輪迭代。例如：<code class="text-amber-300">if x % 3 == 0: continue</code> 會排除所有 3 的倍數。
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-emerald-500/30 space-y-1.5">
+              <div class="font-mono text-emerald-400 font-bold text-sm">while 迴圈三要件與無窮迴圈防範</div>
+              <p class="text-slate-300 leading-relaxed">
+                <code class="text-emerald-300">while (條件式):</code> 用於次數不固定的迴圈，<strong>進入迴圈前會先檢查條件式</strong>。必須具備：(1) 變數初始值、(2) 條件判斷式、(3) 調整變數增減值。<span class="text-rose-400">陷阱：若 <code class="text-rose-300">a = 0; while a &lt; 6: a = a * 2</code>，因 $0 \times 2$ 永遠為 $0$，將陷入無窮迴圈！</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="rounded-xl overflow-hidden border border-slate-700/80 bg-slate-950">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
+              <span class="text-xs font-mono text-amber-300">ch04_break_continue_while.py（最小公倍數 multiple.py / 排除倍數 except5.py / 階乘 while.py）</span>
+              <button onclick="copyCode('code-ch4-while')" class="px-2.5 py-1 rounded bg-amber-500/15 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-mono transition">
+                複製程式碼
+              </button>
+            </div>
+            <pre id="code-ch4-while" class="p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed"><code># 1. break 實作：找兩數的最小公倍數 (multiple.py)
+a = int(input("請輸入 a 的值："))
+b = int(input("請輸入 b 的值："))
+maxno = a * b
+for i in range(1, maxno + 1):
+    if i % a == 0 and i % b == 0:
+        break  # 找到第一個公倍數即為最小公倍數，立即跳出迴圈！
+print(f"{a} 和 {b} 的最小公倍數 = {i}")
+
+# 2. continue 實作：顯示正整數數列，排除 5 的倍數 (except5.py)
+n = int(input("請輸入正整數："))
+for i in range(1, n + 1):
+    if i % 5 == 0:
+        continue  # 若為 5 的倍數則跳過本次列印，直接進入下一輪
+    print(i, end=" ")
+print()
+
+# 3. while 迴圈實作：計算 N! 階乘與解答課本思考題「100! 結尾有幾個 0？」(while.py)
+num = int(input("請輸入正整數 n 的值："))
+ans = i = 1
+while i <= num:
+    ans *= i
+    i += 1
+print(f"{num}! = {ans}")</code></pre>
+          </div>
+        </div>
+
+        <!-- 4.4 獨家加碼：附件沒有的 5 個好範例 (結合實務與認證進階觀念) -->
+        <div id="ch4-advanced" class="neon-card rounded-2xl p-6 space-y-5 border border-amber-500/40 scroll-mt-24">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-lg sm:text-xl font-bold text-amber-300 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-amber-500 text-slate-950 text-xs flex items-center justify-center font-mono font-bold">4.4</span>
+              🌟 講義獨家設計：5 個課本沒有的 Python 迴圈高價值實戰範例
+            </h3>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 font-mono">Original Best Practices</span>
+          </div>
+
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            單靠課本的基礎語法往往難以應付真實專案或進階檢定。以下為您精心設計 <strong>5 個課本沒有的原創經典範例</strong>，涵蓋 Python 獨有的 <code class="text-cyan-300">for...else</code> 語法、狀態鎖定機制、對折搜尋思維、歐幾里得演算法以及「計算 $100!$ 結尾有幾個 0」的演算法解答：
+          </p>
+
+          <!-- 5 個好範例切換分頁 -->
+          <div class="space-y-4">
+            <div class="flex flex-wrap gap-2">
+              <button onclick="switchExTab(0)" id="extab-0" class="ex-tab-btn px-3 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs transition">範例 A：ATM 密碼 3 次鎖卡 (while+break+else)</button>
+              <button onclick="switchExTab(1)" id="extab-1" class="ex-tab-btn px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs transition">範例 B：AI 智慧終極密碼 (動態縮小區間)</button>
+              <button onclick="switchExTab(2)" id="extab-2" id="extab-2" class="ex-tab-btn px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs transition">範例 C：質數偵測器 (Python 獨有 for-else)</button>
+              <button onclick="switchExTab(3)" id="extab-3" class="ex-tab-btn px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs transition">範例 D：輾轉相除法求 GCD ＆ 100! 尾數 0 統計</button>
+              <button onclick="switchExTab(4)" id="extab-4" class="ex-tab-btn px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs transition">範例 E：穿戴裝置異常心率濾波器 (continue 實戰)</button>
+            </div>
+
+            <div class="rounded-xl overflow-hidden border border-amber-500/30 bg-slate-950">
+              <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800">
+                <span id="ex-title" class="text-xs font-mono text-amber-300">bonus_ex1_atm_guard.py — 結合 CH03 密碼判斷與 CH04 次數限制鎖卡機制</span>
+                <button onclick="copyCode('ex-code-display')" class="px-2.5 py-1 rounded bg-amber-500/15 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-mono transition">
+                  複製此範例
+                </button>
+              </div>
+              <pre id="ex-code-display" class="p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed"></pre>
+              <div id="ex-explanation" class="px-4 py-3 bg-slate-900/90 border-t border-slate-800 text-xs text-slate-300 leading-relaxed"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4.5 CH04 隨堂互動測驗 -->
+        <div id="ch4-quiz" class="neon-card rounded-2xl p-6 space-y-4 border border-amber-500/30 scroll-mt-24">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-mono text-xs font-bold">CH04 QUIZ</span>
+              第 4 章：迴圈結構 (range / for / while) 隨堂即測即評（共 20 題）
+            </h3>
+            <span class="text-xs text-amber-300 font-mono">點擊選項立即批改並顯示標準答案與詳解</span>
+          </div>
+          <div id="quiz-container-ch4" class="space-y-3 max-h-[520px] overflow-y-auto pr-2"></div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           🏆 附件 CH01～CH04 全範圍認證題庫總覽與練習中心
+           ========================================== -->
+      <section id="all-exams" class="scroll-mt-24 space-y-6">
+        <div class="neon-card rounded-2xl p-6 sm:p-8 border-l-4 border-l-rose-500">
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-3">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="px-2.5 py-1 rounded-md bg-rose-500/20 text-rose-300 font-mono text-xs font-bold">GLAD ICTP &amp; 課後練習全收錄</span>
+                <span class="text-xs text-slate-400">作答完一題立即批改、顯示正確答案與解析</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-bold text-white">CH01～CH04 認證與課後題庫互動測驗中心（全 85 題）</h2>
+            </div>
+            <button onclick="resetAllQuizzes()" class="px-4 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-mono transition">
+              ↻ 重置所有作答紀錄
+            </button>
+          </div>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+            本區完整收錄您提供的三份題庫附件（<strong>核心能力 87 題卷、附錄 A 60 題卷、課後練習 53 題卷</strong>）中屬於<strong>第 1、2、3、4 章範圍的所有選擇題與是非觀念判斷題（共 85 題不遺漏）</strong>。上方各章節末的隨堂測驗與此處即時同步作答狀態！
+          </p>
+
+          <!-- 題庫篩選器 -->
+          <div class="flex flex-wrap items-center gap-2 pt-4">
+            <button onclick="filterExamBank('ALL')" id="filter-ALL" class="bank-filter-btn px-3 py-1.5 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs font-mono transition">全部題目 (85)</button>
+            <button onclick="filterExamBank('CH1')" id="filter-CH1" class="bank-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition">CH01 基礎與字串 (21)</button>
+            <button onclick="filterExamBank('CH2')" id="filter-CH2" class="bank-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition">CH02 型態與運算子 (32)</button>
+            <button onclick="filterExamBank('CH3')" id="filter-CH3" class="bank-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition">CH03 條件判斷 (12)</button>
+            <button onclick="filterExamBank('CH4')" id="filter-CH4" class="bank-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition">CH04 迴圈結構 (20)</button>
+            <button onclick="filterExamBank('TF')" id="filter-TF" class="bank-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-mono transition">是非觀念檢測題 (10)</button>
+            <button onclick="filterExamBank('UNANSWERED')" id="filter-UNANSWERED" class="bank-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-rose-300 text-xs font-mono transition">僅顯示未作答</button>
+          </div>
+        </div>
+
+        <div id="quiz-container-all" class="space-y-3"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- YouTube 影片時間點斷點跳題練習 Modal -->
+  <div id="videoModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="neon-card rounded-2xl max-w-2xl w-full p-6 space-y-4 border border-purple-500/40">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-mono text-xs">YouTube Checkpoint Engine</span>
+          <h3 class="font-bold text-white">互動教學影片時間點跳題模式</h3>
+        </div>
+        <button onclick="toggleModal('videoModal')" class="text-slate-400 hover:text-white text-sm font-mono">✕ 關閉</button>
+      </div>
+
+      <p class="text-xs text-slate-300 leading-relaxed">
+        本模組結合 YouTube IFrame Player API 概念，當教學影片播放至指定章節關鍵秒數時，會自動暫停並彈出對應觀念檢核題，作答正確後方可繼續播放：
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+        <button onclick="triggerCheckpoint(1)" class="p-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-cyan-500/30 text-left transition">
+          <div class="font-mono text-cyan-400 font-bold">⏱ 03:15 斷點測試</div>
+          <div class="text-white font-medium mt-1">CH01：input() 型態陷阱</div>
+        </button>
+        <button onclick="triggerCheckpoint(2)" class="p-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/30 text-left transition">
+          <div class="font-mono text-emerald-400 font-bold">⏱ 08:40 斷點測試</div>
+          <div class="text-white font-medium mt-1">CH02：感測器優先順序</div>
+        </button>
+        <button onclick="triggerCheckpoint(3)" class="p-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-purple-500/30 text-left transition">
+          <div class="font-mono text-purple-400 font-bold">⏱ 14:20 斷點測試</div>
+          <div class="text-white font-medium mt-1">CH03：elif 分支互斥邏輯</div>
+        </button>
+      </div>
+
+      <div id="checkpoint-box" class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm space-y-3">
+        <div class="text-purple-300 font-mono text-xs">▶ 請點擊上方任一時間斷點，模擬影片暫停跳題互動...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 通知訊息 -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden px-4 py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-semibold text-xs shadow-xl">
+    已複製程式碼至剪貼簿！可以直接貼到 Spyder 執行。
+  </div>
+
+  <script>
+    // 1. 運算子優先順序逐步拆解資料
+    const precedenceSteps = [
+      {
+        expr: '5 + <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">3 * 2</span> &gt; 10 and not (<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">8 // 3</span> == 2) or <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">2 ** 3</span> &lt;= 8',
+        desc: '<strong>步驟 1（核心基礎測試 <code>5 + 3 * 2 &gt; 10</code> 與括號/次方優先）：</strong><br>先計算括號內的整數除法 <code>8 // 3 = 2</code>、次方運算 <code>2 ** 3 = 8</code>，以及乘法 <code>3 * 2 = 6</code>（乘除優先於加減）。'
+      },
+      {
+        expr: '<span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">5 + 6</span> &gt; 10 and not (<span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">2 == 2</span>) or 8 &lt;= 8',
+        desc: '<strong>步驟 2（算術加減與括號內比較）：</strong><br>計算算術加法 <code>5 + 6 = 11</code>，同時完成括號內的相等比較 <code>2 == 2</code> 得到 <code>True</code>。'
+      },
+      {
+        expr: '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">11 &gt; 10</span> and not True or <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">8 &lt;= 8</span>',
+        desc: '<strong>步驟 3（關係比較運算子 <code>&gt;</code>、<code>&lt;=</code>）：</strong><br>所有算術運算完成後，執行比較運算：<code>11 &gt; 10</code> 為 <code>True</code>，且 <code>8 &lt;= 8</code> 為 <code>True</code>。'
+      },
+      {
+        expr: 'True and <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">not True</span> or True',
+        desc: '<strong>步驟 4（邏輯運算子 <code>not</code> 最優先）：</strong><br>在邏輯運算子 <code>not</code>、<code>and</code>、<code>or</code> 之中，<code>not</code> 優先權最高，因此 <code>not True</code> 先轉為 <code>False</code>。'
+      },
+      {
+        expr: '<span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">True and False</span> or True',
+        desc: '<strong>步驟 5（邏輯運算子 <code>and</code> 次之）：</strong><br>接著計算 <code>True and False</code>，因為兩者需同時為真才成立，故結果為 <code>False</code>。'
+      },
+      {
+        expr: '<span class="px-3 py-1 rounded bg-emerald-500/30 text-emerald-300 border border-emerald-400 font-bold">False or True ➔ 最終結果：True</span>',
+        desc: '<strong>步驟 6（邏輯運算子 <code>or</code> 最後執行）：</strong><br>最後執行 <code>False or True</code>，只要其中一邊為 <code>True</code> 整體即為 <code>True</code>！感測器觸發警報狀態。'
+      }
+    ];
+
+    let currentStep = 0;
+    function renderStep() {
+      document.getElementById('step-counter').textContent = `Step ${currentStep + 1} / ${precedenceSteps.length}`;
+      document.getElementById('step-expr').innerHTML = precedenceSteps[currentStep].expr;
+      document.getElementById('step-desc').innerHTML = precedenceSteps[currentStep].desc;
+    }
+    function nextStep() {
+      currentStep = (currentStep + 1) % precedenceSteps.length;
+      renderStep();
+    }
+    function prevStep() {
+      currentStep = (currentStep - 1 + precedenceSteps.length) % precedenceSteps.length;
+      renderStep();
+    }
+
+    // 2. 研發基金複利試算模擬器 (CH02)
+    function runFundSimulator() {
+      const pv = parseFloat(document.getElementById('sim-pv').value) || 0;
+      const ratePct = parseFloat(document.getElementById('sim-rate').value) || 0;
+      const years = parseInt(document.getElementById('sim-years').value) || 0;
+
+      const r = ratePct / 100;
+      const fv = pv * Math.pow(1 + r, years);
+      const gain = fv - pv;
+      const targetMet = fv >= pv * 1.5;
+
+      document.getElementById('sim-fv').textContent = fv.toFixed(2);
+      document.getElementById('sim-gain').textContent = gain.toFixed(2);
+      const targetEl = document.getElementById('sim-target');
+      targetEl.textContent = targetMet ? 'True' : 'False';
+      targetEl.className = targetMet ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+    }
+
+    // 2B. CH03 成績等第與百貨折扣模擬器
+    function runCh3Simulator() {
+      const score = parseInt(document.getElementById('sim-score').value) || 0;
+      let grade = '丁等';
+      if (score >= 90) grade = '優等';
+      else if (score >= 80) grade = '甲等';
+      else if (score >= 70) grade = '乙等';
+      else if (score >= 60) grade = '丙等';
+      document.getElementById('sim-grade-out').textContent = grade;
+
+      const money = parseFloat(document.getElementById('sim-money').value) || 0;
+      let pay = money;
+      let rateText = '無折扣 (未滿 1 萬)';
+      if (money >= 10000) {
+        if (money >= 100000) { pay = money * 0.8; rateText = '8 折 (滿 10 萬)'; }
+        else if (money >= 50000) { pay = money * 0.85; rateText = '85 折 (滿 5 萬)'; }
+        else if (money >= 30000) { pay = money * 0.9; rateText = '9 折 (滿 3 萬)'; }
+        else { pay = money * 0.95; rateText = '95 折 (滿 1 萬)'; }
+      }
+      document.getElementById('sim-disc-rate').textContent = rateText;
+      document.getElementById('sim-disc-pay').textContent = `${pay.toFixed(1)} 元`;
+    }
+
+    // 2C. CH04 range() 互動視覺化產生器
+    function setRangePreset(start, stop, step) {
+      document.getElementById('rng-start').value = start;
+      document.getElementById('rng-stop').value = stop;
+      document.getElementById('rng-step').value = step;
+      updateRangeVisualizer();
+    }
+
+    function updateRangeVisualizer() {
+      const start = parseInt(document.getElementById('rng-start').value) || 0;
+      const stop = parseInt(document.getElementById('rng-stop').value) || 0;
+      const step = parseInt(document.getElementById('rng-step').value);
+      const label = document.getElementById('rng-code-label');
+      const out = document.getElementById('rng-output');
+
+      label.textContent = `list(range(${start}, ${stop}, ${step}))`;
+      if (!step || step === 0) {
+        out.innerHTML = '<span class="text-rose-400">ValueError: range() arg 3 must not be zero (間隔值不可為 0！)</span>';
+        return;
+      }
+      const res = [];
+      if (step > 0) {
+        for (let i = start; i < stop && res.length < 60; i += step) res.push(i);
+      } else {
+        for (let i = start; i > stop && res.length < 60; i += step) res.push(i);
+      }
+      if (res.length === 0) {
+        out.innerHTML = `<span class="text-amber-300">[] （空數列！因為起始值 ${start} 往終止值 ${stop} 方向與間隔 ${step} 相反，迴圈不會執行任何一次）</span>`;
+      } else {
+        out.textContent = `[${res.join(', ')}] （共 ${res.length} 個元素）`;
+      }
+    }
+
+    // 2D. CH04 5 個獨家實戰好範例資料與切換
+    const bonusExamples = [
+      {
+        title: 'bonus_ex1_atm_guard.py — 結合 CH03 密碼判斷與 CH04 次數限制鎖卡機制',
+        code: `# 獨家範例 A：智慧金庫 ATM 密碼 3 次嘗試與自動鎖卡機制
+# (改良自 CH03 password2.py，結合 while 迴圈、break 與 while-else 結構)
+correct_pin = "8888"
+attempts = 0
+max_attempts = 3
+
+while attempts < max_attempts:
+    user_pin = input(f"請輸入金庫密碼 (剩餘 {max_attempts - attempts} 次機會)：")
+    attempts += 1
+    
+    if user_pin == correct_pin:
+        print(f"✅ 驗證成功！您共嘗試了 {attempts} 次，金庫大門已開啟。")
+        break  # 密碼正確，立刻強制跳離 while 迴圈
+    else:
+        print("❌ 密碼錯誤！")
+else:
+    # 當 while 迴圈「不是因為 break 跳出」，而是次數用盡自然結束時執行：
+    print("🚨 警告：連續 3 次輸入錯誤，系統已自動鎖定金融卡並通報管理中心！")`,
+        explanation: '<strong>🌟 教學亮點（比課本更實用的技巧）：</strong>課本 CH03 的 <code>password2.py</code> 只能輸入一次密碼。實務上我們會搭配 <code>while</code> 計數器限制最多輸入 3 次，並利用 Python 獨有的 <code>while...else</code> 語法：當使用者在 3 次內猜對觸發 <code>break</code> 時不會執行 <code>else</code>；一旦 3 次全錯導致迴圈自然結束，就會自動觸發鎖卡警報！'
+      },
+      {
+        title: 'bonus_ex2_guess_number.py — 終極密碼動態區間收斂 (訓練二分搜尋法直覺)',
+        code: `# 獨家範例 B：AI 智慧終極密碼 (動態更新上下界區間與作答統計)
+secret = 58
+low, high = 1, 100
+count = 0
+
+print("=== 歡迎挑戰終極密碼 (1 ~ 100) ===")
+while True:
+    guess = int(input(f"請在 [{low} ~ {high}] 之間猜一個數字："))
+    count += 1
+    
+    # 防呆檢查：避免使用者輸入超出目前提示範圍的數字
+    if guess < low or guess > high:
+        print(f"⚠️ 超出範圍囉！請輸入 {low} 到 {high} 之間的整數。")
+        continue  # 跳過下方比大小邏輯，直接進入下一輪
+        
+    if guess == secret:
+        print(f"🎉 賓果！密碼就是 {secret}，您總共猜了 {count} 次！")
+        break
+    elif guess > secret:
+        high = guess - 1  # 猜太大，將上限縮小
+        print("📉 太高了，往小一點猜！")
+    else:
+        low = guess + 1   # 猜太小，將下限調高
+        print("📈 太低了，往大一點猜！")`,
+        explanation: '<strong>🌟 教學亮點（連結認證二分搜尋法考題）：</strong>此範例完美整合了 <code>while True</code>、<code>continue</code>（防呆過濾）、<code>break</code>（猜中跳出）與 <code>if-elif-else</code>。若每次都猜區間正中間的數字（二分搜尋法 Binary Search），在 1~100 內最多只需 7 次、在 16 筆已排序資料中最多只需 $\\lfloor \\log_2(16) \\rfloor + 1 = 5$ 次即可找到目標！'
+      },
+      {
+        title: 'bonus_ex3_prime_check.py — 質數偵測器與因數分解 (展示 for...else 優雅語法)',
+        code: `# 獨家範例 C：質數 (Prime Number) 偵測器
+# 檢查正整數 n 是否為質數 (大於 1 且除了 1 與本身外沒有其他因數)
+n = int(input("請輸入一個大於 1 的正整數："))
+
+if n <= 1:
+    print("請輸入大於 1 的整數！")
+else:
+    # 只需檢查 2 到 int(n ** 0.5) 即可，大幅提升運算效率！
+    for factor in range(2, int(n ** 0.5) + 1):
+        if n % factor == 0:
+            print(f"❌ {n} 不是質數！因為 {n} = {factor} × {n // factor}")
+            break  # 只要找到一個因數就確定不是質數，立刻跳出迴圈
+    else:
+        # 當 for 迴圈完整走完都沒有遇到 break 時，代表完全沒有其他因數：
+        print(f"💎 {n} 是質數 (Prime Number)！")`,
+        explanation: '<strong>🌟 教學亮點：</strong>結合 CH02 的開根號運算 <code>n ** 0.5</code> 與 CH04 的 <code>for...else</code>。初學者常需要額外設一個布林變數 <code>is_prime = True</code>，但在 Python 中直接將 <code>else</code> 對齊 <code>for</code>，就能在「迴圈沒有被 <code>break</code> 中斷」時直接印出是質數，程式碼簡潔又專業！'
+      },
+      {
+        title: 'bonus_ex4_gcd_and_100fact.py — 輾轉相除法求最大公因數 & 解答課本「100! 有幾個 0」',
+        code: `# 獨家範例 D-1：歐幾里得輾轉相除法求最大公因數 (GCD) 與最小公倍數 (LCM)
+a, b = 10, 15
+x, y = a, b
+while y != 0:
+    x, y = y, x % y  # 多重賦值搭配取餘數，幾行內秒殺最大公因數！
+gcd = x
+lcm = (a * b) // gcd
+print(f"{a} 與 {b} 的最大公因數 GCD = {gcd}，最小公倍數 LCM = {lcm}")
+
+# 獨家範例 D-2：解答課本第 4 章第 16 頁思考題：「100! 結尾後面有幾個 0？」
+# 方法 1：先用 while 算出 100!，再不斷除以 10 檢查餘數是否為 0
+fact = 1
+for i in range(1, 101):
+    fact *= i
+
+zero_count = 0
+temp = fact
+while temp % 10 == 0:
+    zero_count += 1
+    temp //= 10  # 每次消掉結尾的一個 0
+print(f"【解答課本思考題】100! 的結尾總共有 {zero_count} 個 0！")  # 輸出：24 個 0`,
+        explanation: '<strong>🌟 教學亮點（直接解答課本 CH04 第 16 頁思考題）：</strong>課本在介紹 <code>while.py</code> 計算 $100!$ 時留了一個問題：「$100!$ 後面有幾個 0 呢？」。我們透過 <code>while temp % 10 == 0:</code> 搭配整數除法 <code>temp //= 10</code>，就能精確算出 $100!$ 結尾共有 <strong>24 個 0</strong>（也可計算 $100 // 5 + 100 // 25 = 20 + 4 = 24$）！'
+      },
+      {
+        title: 'bonus_ex5_sensor_filter.py — 智慧穿戴裝置異常心率濾波器 (continue 雜訊過濾)',
+        code: `# 獨家範例 E：智慧醫療手環心率資料清洗與異常警報 (for + continue + break)
+# 模擬手環連續採樣的 10 筆心率數據 (-1 代表接觸不良雜訊，>180 代表危險心律不整)
+heart_rates = [72, 75, -1, 78, 82, 0, 76, 80, 195, 74]
+
+valid_sum = 0
+valid_count = 0
+
+for bpm in heart_rates:
+    if bpm <= 0:
+        print(f"⚠️ 偵測到無效雜訊數據 ({bpm})，已使用 continue 自動略過。")
+        continue  # 略過接觸不良的雜訊，不計入平均
+        
+    if bpm >= 180:
+        print(f"🚨 緊急警報！偵測到危險高心率 ({bpm} BPM)，立即中斷監測並發送醫療通知！")
+        break     # 觸發危急閾值，立即跳出迴圈啟動急救流程
+        
+    valid_sum += bpm
+    valid_count += 1
+    print(f"✔ 記錄正常心率：{bpm} BPM")
+
+if valid_count > 0:
+    print(f"📊 有效樣本數：{valid_count} 筆｜平均心率：{valid_sum / valid_count:.1f} BPM")`,
+        explanation: '<strong>🌟 教學亮點：</strong>課本對 <code>continue</code> 只舉了「排除 5 的倍數」的數學例子。在真實資料科學與醫療物聯網（IoT）中，<code>continue</code> 最常被用來「跳過感測器遺失值或雜訊（Data Cleaning）」，而 <code>break</code> 則用於「偵測到致命異常時立即熔斷停機」。'
+      }
+    ];
+
+    function switchExTab(idx) {
+      document.querySelectorAll('.ex-tab-btn').forEach((btn, i) => {
+        if (i === idx) {
+          btn.className = 'ex-tab-btn px-3 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs transition';
+        } else {
+          btn.className = 'ex-tab-btn px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs transition';
+        }
+      });
+      document.getElementById('ex-title').textContent = bonusExamples[idx].title;
+      document.getElementById('ex-code-display').textContent = bonusExamples[idx].code;
+      document.getElementById('ex-explanation').innerHTML = bonusExamples[idx].explanation;
+    }
+
+    // =========================================================================
+    // 3. 附件 CH01～CH04 完整題庫系統 (共 85 題：含單選題與是非觀念題，即做即改)
+    // =========================================================================
+    const examBank = [
+      // ---------------- CH01：程式基礎、語言特性、輸出入與字串 (21題) ----------------
+      { id: 'c1_01', ch: 'CH1', type: 'MC', src: '課後練習 Q1', q: 'Python 的應用領域不包括下列哪一種？', opts: ['(A) 自動控制', '(B) 大數據', '(C) 遊戲設計', '(D) 以上皆是（皆包含於應用領域內）'], ans: 3, exp: 'Python 廣泛應用於自動控制、大數據分析、AI 人工智慧、網頁爬蟲與遊戲設計等領域。' },
+      { id: 'c1_02', ch: 'CH1', type: 'MC', src: '課後練習 Q2', q: '有關 Python 語言的特性，下列何者有誤？', opts: ['(A) 擴充能力強', '(B) 可以大量使用指標 (Pointer)', '(C) 跨平台', '(D) 簡潔易讀'], ans: 1, exp: 'Python 沒有指標（Pointer）語法（C/C++ 語言才有指標），所有變數皆為物件參照。' },
+      { id: 'c1_03', ch: 'CH1', type: 'MC', src: '課後練習 Q3', q: '底下 Python 程式碼的多行註解，下列何者是正確的？', opts: ['(A) // 傳回考試的總分', '(B) /* 傳回考試的總分 */', '(C) \'傳回考試的總分', '(D) \'\'\' 傳回考試的總分 \'\'\' (成對的三個單引號或雙引號)'], ans: 3, exp: 'Python 單行註解使用 #，多行註解（或多行字串）使用成對的三個單引號 \'\'\' 或三個雙引號 """。' },
+      { id: 'c1_04', ch: 'CH1', type: 'MC', src: '核心 Q41 / 課後 Q4', q: '關於 Python 程式語言的註解，下列何者才是正確的作法？', opts: ['(A) 將註解放在任何一行的 # 符號之後', '(B) 將註解放在第一行程式碼之前，用空白行隔開', '(C) 將註解放在任何一行的 /* 和 */ 符號之間', '(D) 將註解放在任何一行的 // 符號之後'], ans: 0, exp: 'Python 的單行註解符號為井字號 #，放在 # 之後的文字不會被直譯器執行。' },
+      { id: 'c1_05', ch: 'CH1', type: 'MC', src: '課後練習 Q5', q: '關於各代程式語言的描述，下列何者有誤？', opts: ['(A) 高階語言更符合人類語言的形式', '(B) 組合語言與硬體有著密切關係', '(C) 機器語言是一種最低階的程式語言', '(D) 組合語言是一種高階語言'], ans: 3, exp: '組合語言（Assembly Language）屬於低階語言，並非高階語言。' },
+      { id: 'c1_06', ch: 'CH1', type: 'MC', src: '課後練習 Q6', q: '下列哪一種程式語言是屬於直譯式語言（Interpreted Language）？', opts: ['(A) Java', '(B) Python', '(C) C++', '(D) C'], ans: 1, exp: 'Python 是典型的直譯式語言，由直譯器逐行翻譯並執行；C 與 C++ 為編譯式語言。' },
+      { id: 'c1_07', ch: 'CH1', type: 'MC', src: '附錄A Q19 / 課後 Q7', q: '演算法（Algorithm）的特性不包括下列何者？', opts: ['(A) 允許無窮迴路', '(B) 至少會有一個輸出結果', '(C) 0 個或多個輸入資料', '(D) 步驟清楚且可行'], ans: 0, exp: '演算法必須具備「有限性（Finiteness）」，必須在有限步驟內結束，絕對不允許無窮迴路！' },
+      { id: 'c1_08', ch: 'CH1', type: 'MC', src: '核心 Q43 / 課後 Q8', q: 'Python 程式裡的區塊，可以透過哪一種方式來區分出程式碼層級，讓程式更具有可讀性？', opts: ['(A) 縮排 (Indentation)', '(B) 註解', '(C) 跳行', '(D) 留白'], ans: 0, exp: 'Python 強制使用「縮排」（通常為 4 個空白或 1 個 Tab）來界定程式區塊層級。' },
+      { id: 'c1_09', ch: 'CH1', type: 'MC', src: '課後練習 Q9', q: '以下哪一個是運算思維的目標？不但是人類利用電腦解決問題的技巧之一，也是程式設計領域中最重要的關鍵：', opts: ['(A) 拆解 (Decomposition)', '(B) 模式識別 (Pattern Recognition)', '(C) 歸納抽象化 (Abstraction)', '(D) 演算法 (Algorithm)'], ans: 3, exp: '運算思維的最終目標與程式設計最核心的關鍵即是設計出解決問題的「演算法 (Algorithm)」。' },
+      { id: 'c1_10', ch: 'CH1', type: 'MC', src: '附錄A Q1', q: '請填入空格，以輸出 Hello World：\n____("Hello World")', opts: ['(A) print', '(B) list', '(C) found', '(D) echo'], ans: 0, exp: 'Python 標準輸出函式為 print()。' },
+      { id: 'c1_11', ch: 'CH1', type: 'MC', src: '核心 Q2', q: '請問以下程式會輸出什麼結果？\nprint(\'1.0\'+\'2.0\')', opts: ['(A) 1.02.0', '(B) 3.0', '(C) 3.000000', '(D) error'], ans: 0, exp: '\'1.0\' 與 \'2.0\' 皆有單引號包覆，屬於字串（str），字串使用 + 會進行文字串接，輸出 1.02.0。' },
+      { id: 'c1_12', ch: 'CH1', type: 'MC', src: '附錄A Q2', q: '請問以下程式會輸出什麼結果？\nprint(\'abc\'+\'def\')', opts: ['(A) abcdef', '(B) abc def', '(C) \'abc\'+\'def\'', '(D) abc'], ans: 0, exp: '字串相加會直接無縫接合，輸出 abcdef。' },
+      { id: 'c1_13', ch: 'CH1', type: 'MC', src: '附錄A Q3', q: '請問以下程式會輸出什麼結果？\nprint(\'1.0+2.0\')', opts: ['(A) 1.0+2.0', '(B) 3.0', '(C) 3.000000', '(D) error'], ans: 0, exp: '單引號內的 \'1.0+2.0\' 視為純字串原樣輸出，不會計算加法。' },
+      { id: 'c1_14', ch: 'CH1', type: 'MC', src: '附錄A Q5', q: '請問以下程式會輸出什麼結果？\nprint(5*\'abc\')', opts: ['(A) abcabcabcabcabc', '(B) 5*\'abc\'', '(C) 5abc', '(D) error'], ans: 0, exp: '整數 5 乘以字串 \'abc\'，代表將 \'abc\' 重複串接 5 次。' },
+      { id: 'c1_15', ch: 'CH1', type: 'MC', src: '核心 Q10', q: '請問以下程式會輸出什麼結果？\nprint(5.0*\'abc\')', opts: ['(A) error', '(B) abcabcabcabcabc', '(C) 5.0*\'abc\'', '(D) 5.0abc'], ans: 0, exp: '字串只能與「整數 (int)」相乘重複，不能與浮點數 5.0 相乘，會發生 TypeError (error)！' },
+      { id: 'c1_16', ch: 'CH1', type: 'MC', src: '附錄A Q13', q: '請問以下程式會印出什麼結果？\nx = \'a\'\nx *= 2\nprint(x)', opts: ['(A) aa', '(B) a', '(C) error', '(D) 2a'], ans: 0, exp: 'x *= 2 等同於 x = x * 2，字串 \'a\' 重複 2 次變成 \'aa\'。' },
+      { id: 'c1_17', ch: 'CH1', type: 'MC', src: '核心 Q30 / 課後 Q23', q: '關於字串的描述，下列何者有誤？', opts: ['(A) 輸出字串時想要分行顯示，可以在要斷行的地方加入「\\b」', '(B) 利用三重單或雙引號把多行字串，固定其輸出的模式', '(C) 當程式碼太長時只要在該行末端加一個反斜線 \\ 可以換行繼續撰寫', '(D) 字串物件一旦被配置，它的內容是不可變的'], ans: 0, exp: '分行（換行）顯示應該加入「\\n」而非「\\b」（\\b 是倒退字元 Backspace）。' },
+      { id: 'c1_18', ch: 'CH1', type: 'MC', src: '核心 Q49', q: '請問以下程式會印出什麼結果？\nx, y = 4, 3\nresult = x * x + 2 * x * y + y * y\nprint(\'({} + {}) ^ 2) = {}\'.format(x, y, result))', opts: ['(A) (4 + 3) ^ 2) = 49', '(B) ({4} + {3}) ^ 2) = {49}', '(C) (3.0 + 4.0) ^ 2.0) = 49.0', '(D) ({3} + {4}) ^ 2) = {49}'], ans: 0, exp: 'result = 16 + 24 + 9 = 49，.format(x, y, result) 會將 {} 依序替換為 4、3、49。' },
+      { id: 'c1_19', ch: 'CH1', type: 'MC', src: '核心 Q26 / 課後 Q25', q: '下列哪一個函數可以回傳 ASCII 碼對應的字元？', opts: ['(A) chr() 函數', '(B) ord() 函數', '(C) strip() 函數', '(D) split() 函數'], ans: 0, exp: 'chr() 將 ASCII 整數編碼轉為字元（如 chr(65) 回傳 \'A\'）；ord() 則是將字元轉為 ASCII 碼。' },
+      { id: 'c1_20', ch: 'CH1', type: 'TF', src: 'CH01 觀念是非題', q: '【是非題】在 Python 中，使用 input() 函式讀取使用者從鍵盤輸入的數字（例如輸入 100），其回傳的資料型態預設就是整數（int）。', opts: ['(O) 是 (True)', '(X) 否 (False)'], ans: 1, exp: '錯誤（False）！input() 回傳的資料型態一律為「字串 (str)」，必須使用 int(input()) 才會轉為整數。' },
+      { id: 'c1_21', ch: 'CH1', type: 'TF', src: 'CH01 觀念是非題', q: '【是非題】演算法（Algorithm）的五大特性中，允許沒有輸入資料（0 個輸入），但至少要有 1 個以上的輸出結果，且絕對不允許無窮迴路。', opts: ['(O) 是 (True)', '(X) 否 (False)'], ans: 0, exp: '正確（True）！演算法可接受 0 個或多個輸入，但必須至少產生 1 個輸出，並在有限步驟內終止。' },
+
+      // ---------------- CH02：資料型態、變數、運算式與運算子 (32題) ----------------
+      { id: 'c2_01', ch: 'CH2', type: 'MC', src: '核心 Q1', q: '請問以下程式會輸出什麼結果？\nprint(1.0+2.0)', opts: ['(A) 3.0', '(B) 3.000000', '(C) 3', '(D) 3e0'], ans: 0, exp: '浮點數 1.0 加 2.0 結果為浮點數 3.0。' },
+      { id: 'c2_02', ch: 'CH2', type: 'MC', src: '核心 Q3', q: '請問以下程式會輸出什麼結果？\nprint(1.0+2)', opts: ['(A) 3.0', '(B) 3', '(C) 3.000000', '(D) error'], ans: 0, exp: '浮點數 1.0 與整數 2 相加，型態會自動提升為浮點數 3.0。' },
+      { id: 'c2_03', ch: 'CH2', type: 'MC', src: '核心 Q4', q: '請問以下程式會輸出什麼結果？\nprint(5/2)', opts: ['(A) 2.5', '(B) 2', '(C) 3', '(D) 2.0'], ans: 0, exp: 'Python 的單斜線 / 為真除法（浮點數除法），5 / 2 結果為 2.5。' },
+      { id: 'c2_04', ch: 'CH2', type: 'MC', src: '核心 Q5', q: '請問以下程式會輸出什麼結果？\nprint(5//2)', opts: ['(A) 2', '(B) 3', '(C) 2.5', '(D) 2.50000'], ans: 0, exp: '雙斜線 // 為整數除法（取商並捨去小數），兩整數相除 5 // 2 結果為整數 2。' },
+      { id: 'c2_05', ch: 'CH2', type: 'MC', src: '核心 Q6', q: '請問以下程式會輸出什麼結果？\nprint(5.0/2)', opts: ['(A) 2.5', '(B) 2.500000', '(C) 2.0', '(D) 3.0'], ans: 0, exp: '5.0 / 2 執行浮點數除法，結果為 2.5。' },
+      { id: 'c2_06', ch: 'CH2', type: 'MC', src: '核心 Q7 / 附錄A Q4', q: '請問以下程式會輸出什麼結果？\nprint(5.000000//2.000000)  (或 print(5.0//2.0))', opts: ['(A) 2.0', '(B) 2.5', '(C) 2.500000', '(D) 3.0'], ans: 0, exp: '雙斜線 // 雖然是取整數商，但因為運算元是浮點數（5.0 與 2.0），回傳結果會保持為浮點數型態 2.0！' },
+      { id: 'c2_07', ch: 'CH2', type: 'MC', src: '核心 Q8', q: '請問以下程式會輸出什麼結果？\nprint(5*2)', opts: ['(A) 10', '(B) 5*2', '(C) 10.0', '(D) error'], ans: 0, exp: '兩個整數相乘 5 * 2 結果為整數 10。' },
+      { id: 'c2_08', ch: 'CH2', type: 'MC', src: '核心 Q9', q: '請問以下程式會輸出什麼結果？\nprint(5.0*2.0)', opts: ['(A) 10.0', '(B) 10.00', '(C) 10.000000', '(D) 5.0*2.0'], ans: 0, exp: '兩個浮點數相乘 5.0 * 2.0 結果為 10.0。' },
+      { id: 'c2_09', ch: 'CH2', type: 'MC', src: '核心 Q11', q: '請問以下程式會印出什麼結果？\nx = 5\nprint(x * 2)', opts: ['(A) 10', '(B) 2x', '(C) 5', '(D) error'], ans: 0, exp: 'x 為整數 5，5 * 2 印出 10。' },
+      { id: 'c2_10', ch: 'CH2', type: 'MC', src: '核心 Q12', q: '請問以下程式會印出什麼結果？\nx = 5\nprint(x * 2.0)', opts: ['(A) 10.0', '(B) 10.000000', '(C) x*2.0', '(D) 2.0'], ans: 0, exp: '整數 5 乘以浮點數 2.0，結果自動提升為浮點數 10.0。' },
+      { id: 'c2_11', ch: 'CH2', type: 'MC', src: '核心 Q13', q: '請問以下程式會印出什麼結果？\nx = 5\nprint(x ** 3)', opts: ['(A) 125', '(B) 15', '(C) 2', '(D) 1'], ans: 0, exp: '** 為次方運算子，5 ** 3 代表 5 的 3 次方 (5 × 5 × 5 = 125)。' },
+      { id: 'c2_12', ch: 'CH2', type: 'MC', src: '核心 Q14', q: '請問以下程式會印出什麼結果？\nx = 9\nprint(x ** 0.5)', opts: ['(A) 3.0', '(B) 9.0', '(C) 3', '(D) 4.500000'], ans: 0, exp: '0.5 次方代表開平方根，9 開根號為 3，且因指數 0.5 為浮點數，結果為 3.0。' },
+      { id: 'c2_13', ch: 'CH2', type: 'MC', src: '核心 Q15', q: '請問以下程式會印出什麼結果？\nx = 8\nprint(x ** (1/3))', opts: ['(A) 2.0', '(B) 2.7', '(C) 3', '(D) 64'], ans: 0, exp: '1/3 次方代表開立方根，8 的立方根為 2.0。' },
+      { id: 'c2_14', ch: 'CH2', type: 'MC', src: '核心 Q16 / 附錄A Q7', q: '請問以下程式會印出什麼結果？\nx = 5.00\nprint(x % 2.00)', opts: ['(A) 1.0', '(B) 1.00', '(C) 2.5', '(D) 2.500000'], ans: 0, exp: '% 為取餘數運算子，5.00 除以 2.00 餘數為浮點數 1.0（Python 預設只顯示一位 .0）。' },
+      { id: 'c2_15', ch: 'CH2', type: 'MC', src: '核心 Q17 / 附錄A Q9', q: '請問以下程式會印出什麼結果？\nx = \'A\'\nprint(x == \'A\')', opts: ['(A) True', '(B) False', '(C) 1', '(D) 0'], ans: 0, exp: '== 為相等比較運算子，兩邊皆為大寫 \'A\'，故回傳布林值 True。' },
+      { id: 'c2_16', ch: 'CH2', type: 'MC', src: '附錄A Q10', q: '請問以下程式會印出什麼結果？\nx = \'A\'\nprint(x == \'a\')', opts: ['(A) False', '(B) True', '(C) 1', '(D) 0'], ans: 0, exp: 'Python 嚴格區分大小寫，\'A\' (ASCII 65) 不等於 \'a\' (ASCII 97)，故輸出 False。' },
+      { id: 'c2_17', ch: 'CH2', type: 'MC', src: '核心 Q18 / 附錄A Q11', q: '請問以下程式會印出什麼結果？\nx = 5.0\nx -= 1\nprint(x)', opts: ['(A) 4.0', '(B) 4', '(C) 4.1', '(D) error'], ans: 0, exp: 'x -= 1 等同於 x = x - 1 = 5.0 - 1 = 4.0。' },
+      { id: 'c2_18', ch: 'CH2', type: 'MC', src: '核心 Q19 / 附錄A Q6', q: '請問以下程式會印出什麼結果？\nx = 5.0\nx **= 2\nprint(x)', opts: ['(A) 25.0', '(B) 5.0', '(C) 2.5', '(D) 0.25'], ans: 0, exp: 'x **= 2 等同於 x = 5.0 ** 2 = 25.0。' },
+      { id: 'c2_19', ch: 'CH2', type: 'MC', src: '附錄A Q8', q: '請問以下程式會印出什麼結果？\nx = 5.00\nprint(x - 2 * 2)', opts: ['(A) 1.0', '(B) 6', '(C) 6.0', '(D) 1'], ans: 0, exp: '先乘除後加減：先算 2 * 2 = 4，再算 5.00 - 4 = 1.0。' },
+      { id: 'c2_20', ch: 'CH2', type: 'MC', src: '附錄A Q12', q: '請問以下程式會印出什麼結果？\nx = 5.0\nx //= 2\nprint(x)', opts: ['(A) 2.0', '(B) 2', '(C) 2.5', '(D) 5.2'], ans: 0, exp: 'x //= 2 等同 x = 5.0 // 2，因含有浮點數，整數除法結果為 2.0。' },
+      { id: 'c2_21', ch: 'CH2', type: 'MC', src: '核心 Q21', q: '請問以下程式會印出什麼結果？\nx = 5\nx &= 2\nprint(x)', opts: ['(A) 0', '(B) 1', '(C) 2', '(D) 5'], ans: 0, exp: '&= 為位元 AND 指派運算。5 的二進位為 0101，2 的二進位為 0010，0101 & 0010 = 0000 (即 0)。' },
+      { id: 'c2_22', ch: 'CH2', type: 'MC', src: '附錄A Q14', q: '請問以下程式會印出什麼結果？\nx = 5\nx <<= 2\nprint(x)', opts: ['(A) 20', '(B) 10', '(C) 5', '(D) 2'], ans: 0, exp: '<<= 為位元左移指派運算。5 (二進位 101) 左移 2 位變成 10100，相當於 5 × (2**2) = 20。' },
+      { id: 'c2_23', ch: 'CH2', type: 'MC', src: '附錄A Q30 / 課後 Q14', q: '運算式「a = 15 % 4」，變數 a 會儲存什麼值？', opts: ['(A) 3', '(B) 5', '(C) 4', '(D) 0'], ans: 0, exp: '15 除以 4 的商為 3，餘數為 3，故 15 % 4 = 3。' },
+      { id: 'c2_24', ch: 'CH2', type: 'MC', src: '核心 Q38', q: '計算以下的 Python 數學運算：(3 * (1 + 2) ** 3 - (2 ** 3) * 2) 結果為何？', opts: ['(A) 65', '(B) 3', '(C) 13', '(D) 15'], ans: 0, exp: '(1+2)**3 = 3**3 = 27，3 * 27 = 81；(2**3)*2 = 8 * 2 = 16；81 - 16 = 65。' },
+      { id: 'c2_25', ch: 'CH2', type: 'MC', src: '核心 Q27 / 課後 Q17', q: '有關邏輯運算子的描述，下列何者有誤？', opts: ['(A) result = (48 % 6 == 0) and (24 % 4 == 0) 運算後的 result 回傳 False', '(B) 運算結果僅有「真(True)」與「假(False)」兩種值', '(C) 包括 and、or、not 等運算子', '(D) 使用 and、or 運算子做邏輯運算時，會採用快捷運算'], ans: 0, exp: '48 % 6 == 0 為 True，24 % 4 == 0 也為 True，True and True 結果應回傳 True 而非 False！' },
+      { id: 'c2_26', ch: 'CH2', type: 'MC', src: '核心 Q35 / 課後 Q15', q: '下列有關運算子與運算式的描述，何者有誤？', opts: ['(A) 「/」與「%」都是除法運算子，「/」會有浮點數；「%」會將除法結果的小數部分去掉', '(B) 運算式是由運算子(Operator)與運算元(Operand)所組成', '(C) 運算子如果只有一個運算元則稱為「一元運算子」', '(D) 運算式運算結果的資料型態將以運算元中資料型態最大的變數為主'], ans: 0, exp: '「%」是取餘數（Modulo），將除法結果小數部分去掉的整數除法運算子是「//」！' },
+      { id: 'c2_27', ch: 'CH2', type: 'MC', src: '核心 Q39 / 課後 Q12', q: '有關 Python 資料型態的說明，下列何者正確？', opts: ['(A) 動態型別、強型別', '(B) 靜態型別、弱型別', '(C) 動態型別、弱型別', '(D) 靜態型別、強型別'], ans: 0, exp: 'Python 在執行期動態決定變數型別（動態型別），且不允許隨意隱式轉換不同型別（強型別）。' },
+      { id: 'c2_28', ch: 'CH2', type: 'MC', src: '核心 Q40 / 課後 Q10', q: '有關 Python 變數命名與指派，下列何者有誤？', opts: ['(A) 使用變數時要事先宣告其資料型態', '(B) 每個變數有其資料型態', '(C) 變數的值是使用等號(=)來指派', '(D) Python 是區分大小寫的語言'], ans: 0, exp: 'Python 為動態型別語言，使用變數時「不需要」事先宣告其資料型態。' },
+      { id: 'c2_29', ch: 'CH2', type: 'MC', src: '附錄A Q20 / 課後 Q11', q: '有關 Python 變數命名，下列何者有誤？', opts: ['(A) 變數名稱第一個字元可以是數字', '(B) 不能使用空白字元', '(C) 變數名稱支援中文', '(D) 不能使用 Python 內建的保留字'], ans: 0, exp: 'Python 變數名稱的第一個字元必須是英文字母、底線 _ 或中文字，絕對不能以數字開頭！' },
+      { id: 'c2_30', ch: 'CH2', type: 'MC', src: '附錄A Q29 / 課後 Q16', q: '有關指派運算子的描述，何者有誤？', opts: ['(A) 使用指派運算子（含複合指派）時，變數的值不必事先設定', '(B) 是將等號右方的資料值指派給等號左方的變數', '(C) 有單一指派和複合指派兩種指派方式', '(D) 在 Python 中單一個等號「=」是指派，兩個等號「==」用來做關係比較'], ans: 0, exp: '使用複合指派運算子（如 x += 1）時，變數 x 的值必須事先設定，否則會產生 NameError！' },
+      { id: 'c2_31', ch: 'CH2', type: 'MC', src: '核心 Q44 / 附錄A Q16', q: '你需要編寫程式碼要求使用者提供一個值，並將該值轉換為「整數」來進行計算，你應該使用哪個函式與程式碼片段？', opts: ['(A) totalItems = int(input("請輸入一個數值?"))', '(B) totalItems = input("請輸入一個數值?")', '(C) totalItems = float(input("請輸入一個數值?"))', '(D) totalItems = str(input("請輸入一個數值?"))'], ans: 0, exp: '將數值或字串轉為整數應使用 int() 函式。' },
+      { id: 'c2_32', ch: 'CH2', type: 'TF', src: 'CH02 觀念是非題', q: '【是非題】在 Python 中，單一個等號「=」用於關係比較是否相等，而兩個等號「==」則用於將右方的值指派給左方的變數。', opts: ['(O) 是 (True)', '(X) 否 (False)'], ans: 1, exp: '錯誤（False）！剛好相反：單一等號「=」是指派（Assignment），兩個等號「==」才是關係比較（Equality）。' },
+
+      // ---------------- CH03：條件判斷與流程控制 (12題) ----------------
+      { id: 'c3_01', ch: 'CH3', type: 'MC', src: '附錄A Q22', q: '請問以下程式會印出什麼結果？\nif 5 > 2:\n    print(\'True\')\nelse:\n    print(\'False\')', opts: ['(A) True', '(B) False', '(C) 1', '(D) 0'], ans: 0, exp: '5 > 2 條件成立，執行 if 區塊印出 True。' },
+      { id: 'c3_02', ch: 'CH3', type: 'MC', src: '核心 Q45', q: '請問以下程式會印出什麼結果？\nif 5 > 2.0:\n    print(\'True\')\nelse:\n    print(\'False\')', opts: ['(A) True', '(B) False', '(C) 1', '(D) 0'], ans: 0, exp: '整數 5 與浮點數 2.0 可直接比較大小，5 > 2.0 為真，印出 True。' },
+      { id: 'c3_03', ch: 'CH3', type: 'MC', src: '附錄A Q23', q: '請問以下程式會印出什麼結果？\nif \'5\' > \'2\':\n    print(\'True\')\nelse:\n    print(\'False\')', opts: ['(A) True', '(B) False', '(C) 1', '(D) 0'], ans: 0, exp: '字元比較依 ASCII 碼順序，\'5\' (ASCII 53) > \'2\' (ASCII 50) 成立，印出 True。' },
+      { id: 'c3_04', ch: 'CH3', type: 'MC', src: '核心 Q46', q: '請問以下程式會印出什麼結果？\nprint(\'5\' > \'a\')', opts: ['(A) False', '(B) True', '(C) 0', '(D) 1'], ans: 0, exp: '數字字元 \'5\' 的 ASCII 碼為 53，小寫字母 \'a\' 的 ASCII 碼為 97，53 > 97 為 False！' },
+      { id: 'c3_05', ch: 'CH3', type: 'MC', src: '核心 Q47', q: '請問以下程式會印出什麼結果？\nprint(\'b\' > \'a\')', opts: ['(A) True', '(B) False', '(C) 0', '(D) 1'], ans: 0, exp: '小寫字母 \'b\' (ASCII 98) > \'a\' (ASCII 97)，故印出 True。' },
+      { id: 'c3_06', ch: 'CH3', type: 'MC', src: '附錄A Q38', q: '下列程式碼是用來判斷所輸入的數字是偶數或奇數，第 2 行空白處內容應為何？\n1 num = int(input(\'Please input a number:\'))\n2 if ________:\n3     print(num, \'是偶數\')\n4 else:\n5     print(num, \'是奇數\')', opts: ['(A) num % 2 == 0', '(B) num // 2 == 0', '(C) num % 2 == 1', '(D) 以上皆非'], ans: 0, exp: '偶數能被 2 整除（除以 2 的餘數為 0），故使用 num % 2 == 0。' },
+      { id: 'c3_07', ch: 'CH3', type: 'MC', src: '附錄A Q24', q: '請問以下條件判斷程式會印出什麼結果？\ndef test_number5(x, y):\n    if x == y or abs(x - y) == 5 or (x + y) == 5:\n        return True\n    else:\n        return False\nprint(test_number5(7, 2))', opts: ['(A) True', '(B) False', '(C) 1', '(D) 0'], ans: 0, exp: '傳入 x=7, y=2，其中 abs(7 - 2) == 5 成立，or 只要有一項為真即回傳 True。' },
+      { id: 'c3_08', ch: 'CH3', type: 'MC', src: '附錄A Q25', q: '請問以下條件判斷程式會印出什麼結果？\ndef sum_thrice(x, y, z):\n    sum = x + y + z\n    if x == y == z:\n        sum = sum * 3\n    return sum\nprint(sum_thrice(3, 3, 3))', opts: ['(A) 27', '(B) 9', '(C) 3', '(D) 81'], ans: 0, exp: '初始 sum = 3+3+3 = 9；因為 x == y == z (3==3==3) 成立，sum = 9 * 3 = 27。' },
+      { id: 'c3_09', ch: 'CH3', type: 'MC', src: '附錄A Q39', q: '試問下列條件判斷程式碼中，輸出結果為？\ndef m(n1, n2):\n    if n1 > n2:\n        return n1\n    else:\n        return n2\nprint(m(3, 8))', opts: ['(A) 8', '(B) 3', '(C) 11', '(D) 以上皆非'], ans: 0, exp: 'n1=3, n2=8，因 3 > 8 為 False，進入 else 分支回傳較大值 n2 (8)。' },
+      { id: 'c3_10', ch: 'CH3', type: 'TF', src: 'CH03 課本觀念是非題', q: '【是非題】在 Python 的「if...elif...else」多向判斷式中，若第一個 if 的條件式已經為 True 並執行完該區塊，程式仍會繼續往下檢查後面的 elif 條件式。', opts: ['(O) 是 (True)', '(X) 否 (False)'], ans: 1, exp: '錯誤（False）！if...elif...else 各分支具有互斥性，只要其中一個條件成立並執行完畢，就會直接跳出整個判斷結構。' },
+      { id: 'c3_11', ch: 'CH3', type: 'TF', src: 'CH03 課本觀念是非題', q: '【是非題】在判斷式之內還可以包含另一個判斷式（例如在百貨公司折扣程式 discount.py 中，先判斷是否滿 1 萬元，再於內部細分 10 萬、5 萬、3 萬折扣），稱為「巢狀判斷式」。', opts: ['(O) 是 (True)', '(X) 否 (False)'], ans: 0, exp: '正確（True）！判斷式內部包含判斷式即稱為巢狀判斷式（Nested if）。' },
+      { id: 'c3_12', ch: 'CH3', type: 'TF', src: 'CH03 課本觀念是非題', q: '【是非題】單向判斷式「if (條件式):」當條件式結果為 False 時，不會執行 if 縮排區塊內的敘述，而是直接跳去執行後一列程式。', opts: ['(O) 是 (True)', '(X) 否 (False)'], ans: 0, exp: '正確（True）！單向判斷式沒有 else 分支，條件為 False 時直接略過縮排區塊。' },
+
+      // ---------------- CH04：迴圈結構 range / for / while / break / continue (20題) ----------------
+      { id: 'c4_01', ch: 'CH4', type: 'MC', src: '核心 Q51 / 課後 Q18', q: '對於 for/in 迴圈的描述，下列何者不正確？', opts: ['(A) 遞增值預設加 2', '(B) 巢狀迴圈架構，迴圈間不可交錯', '(C) 計數器要有起始值和終止值', '(D) for 迴圈可以走訪任何序列項目'], ans: 0, exp: 'for 搭配 range() 時，若未特別指定間隔遞增值，預設每次遞增值為「加 1」而非加 2！' },
+      { id: 'c4_02', ch: 'CH4', type: 'MC', src: '附錄A Q28 / 課後 Q20', q: 'for/in 迴圈每次執行一次時，如果增減值沒有特別指定，預設值為何？', opts: ['(A) 1', '(B) 0', '(C) -1', '(D) 3'], ans: 0, exp: 'range() 的間隔值（step）預設為 1。' },
+      { id: 'c4_03', ch: 'CH4', type: 'MC', src: '附錄A Q26 / 課後 Q21', q: '對於迴圈的描述，下列何者不正確？', opts: ['(A) 巢狀迴圈內外迴圈可以交錯使用', '(B) 在 for/in 迴圈中，還可以包含其他的 for/in 迴圈', '(C) 如果跳離迴圈的條件設定不當，有可能陷入無窮迴圈', '(D) while 迴圈會先檢查條件運算式'], ans: 0, exp: '巢狀迴圈的內層迴圈必須完整包覆在外層迴圈之內，內外迴圈絕對「不可交錯」！' },
+      { id: 'c4_04', ch: 'CH4', type: 'MC', src: '附錄A Q27 / 課後 Q19', q: '對於 while 迴圈的描述，下列何者不正確？', opts: ['(A) 進入迴圈並不會做條件檢查', '(B) 當判斷條件式為真時才會執行迴圈內的敘述', '(C) 要注意檢查離開迴圈的條件是否存在，才不會導致無窮迴圈', '(D) 通常具備變數初始值、迴圈條件式及調整變數增減值三個要件'], ans: 0, exp: 'while 屬於「前測式迴圈」，在進入迴圈執行程式區塊前，一定會先做條件檢查！' },
+      { id: 'c4_05', ch: 'CH4', type: 'MC', src: '附錄A Q52 / 課後 Q29', q: 'range(2, 8) 會產生下列哪一個數列（串列）？', opts: ['(A) [2, 3, 4, 5, 6, 7]', '(B) [2, 8]', '(C) [2, 3, 4, 5, 6, 7, 8]', '(D) [1, 2, 3, 4, 5, 6, 7]'], ans: 0, exp: 'range(2, 8) 起始值為 2，終止值為 8（不包含 8），故產生 [2, 3, 4, 5, 6, 7]。' },
+      { id: 'c4_06', ch: 'CH4', type: 'MC', src: '核心 Q53 / 課後 Q22', q: '試問下列程式碼中，最後輸出的 k 值會為多少？\nk = 10\nwhile k <= 13:\n    k += 1\nprint(k)', opts: ['(A) 14', '(B) 12', '(C) 13', '(D) 10'], ans: 0, exp: '當 k = 13 時，符合 k <= 13 進入迴圈執行 k += 1 變成 14；接著 14 <= 13 為 False 離開迴圈，印出 14。' },
+      { id: 'c4_07', ch: 'CH4', type: 'MC', src: '核心 Q54', q: '試問下列程式碼中，輸出結果為？\nfor a in range(3):\n    print(a, end="")', opts: ['(A) 012', '(B) 0123', '(C) 123', '(D) 0 換行 1 換行 2'], ans: 0, exp: 'range(3) 產生 0, 1, 2，且 print 設定 end="" 不換行緊密連接，故輸出 012。' },
+      { id: 'c4_08', ch: 'CH4', type: 'MC', src: '附錄A Q31', q: '試問下列程式碼中，輸出結果為？\nfor a in range(3):\n    print(a)', opts: ['(A) 0 換行 1 換行 2 (直列印出 0, 1, 2)', '(B) 0123', '(C) 012', '(D) 0 換行 1 換行 2 換行 3'], ans: 0, exp: 'print(a) 預設 end="\\n" 每次印完換行，故分成三行印出 0、1、2。' },
+      { id: 'c4_09', ch: 'CH4', type: 'MC', src: '附錄A Q32', q: '試問下列程式碼中，輸出結果為？\nfor a in range(1, 5, 2):\n    print(a, end="")', opts: ['(A) 13', '(B) 135', '(C) 1 換行 3 換行 5', '(D) 1 換行 3'], ans: 0, exp: 'range(1, 5, 2) 從 1 開始每次加 2，小於 5 的數為 1, 3，搭配 end="" 輸出 13。' },
+      { id: 'c4_10', ch: 'CH4', type: 'MC', src: '附錄A Q33', q: '試問下列程式碼中，輸出結果為？\nfor a in range(5, 1, -2):\n    print(a)', opts: ['(A) 5 換行 3 (直列印出 5 與 3)', '(B) 53', '(C) 5 換行 3 換行 1', '(D) 531'], ans: 0, exp: 'range(5, 1, -2) 從 5 每次減 2 且大於 1（不含 1），故分成兩行印出 5 與 3。' },
+      { id: 'c4_11', ch: 'CH4', type: 'MC', src: '核心 Q55', q: '試問下列程式碼中，輸出結果為？\nfor a in range(2, 5, -2):\n    print(a)', opts: ['(A) 不顯示任何內容', '(B) 顯示錯誤', '(C) 2', '(D) 5'], ans: 0, exp: '起始值 2 小於終止值 5，但間隔值卻是負數 -2，產生空數列，迴圈一次都不會執行，故不顯示任何內容！' },
+      { id: 'c4_12', ch: 'CH4', type: 'MC', src: '核心 Q56', q: '試問下列巢狀迴圈程式碼中，輸出結果為？\nfor x in range(1, 10):\n    for y in range(1, 10):\n        x += y\nprint(x)', opts: ['(A) 54', '(B) 55', '(C) 99', '(D) 100'], ans: 0, exp: '外層最後一輪 x 被重設為 9，接著內層迴圈將 y = 1~9 (總和 45) 累加到 x 上，故最終 x = 9 + 45 = 54！' },
+      { id: 'c4_13', ch: 'CH4', type: 'MC', src: '附錄A Q34', q: '試問下列巢狀迴圈程式碼中，輸出結果為？\nfor x in range(1, 10):\n    for y in range(1, 10):\n        x += 1\nprint(x)', opts: ['(A) 18', '(B) 20', '(C) 9', '(D) 10'], ans: 0, exp: '外層最後一輪 x 被設為 9，內層執行 9 次 x += 1（共加 9），故最終印出 9 + 9 = 18。' },
+      { id: 'c4_14', ch: 'CH4', type: 'MC', src: '附錄A Q35 / 核心 Q57-58', q: '試問下列程式碼中，輸出結果為何？（哪個數字因為是 3 的倍數而不可能輸出？）\nfor x in range(1, 9):\n    if x % 3 == 0:\n        continue\n    print(x, end="")', opts: ['(A) 輸出 124578（3 與 6 不會輸出）', '(B) 輸出 123456789', '(C) 輸出 8', '(D) 輸出 36'], ans: 0, exp: 'range(1, 9) 為 1~8，當 x 為 3 或 6 時觸發 continue 跳過 print，故輸出 124578（若 print 在迴圈外則印出最後的 x=8）。' },
+      { id: 'c4_15', ch: 'CH4', type: 'MC', src: '核心 Q59-60', q: '比較下列兩段印星號直角三角形的巢狀迴圈：\n【甲】for x in range(1,6): 內層 for y in range(1,x): print("*", end="")\n【乙】for x in range(1,6): 內層 for y in range(0,x): print("*", end="")', opts: ['(A) 【甲】印出 1~4 顆星（共 4 行有星號）；【乙】印出 1~5 顆星（共 5 行有星號）', '(B) 兩者皆印出 1~5 顆星', '(C) 兩者皆印出 1~4 顆星', '(D) 【甲】印出 5 顆星、【乙】印出 4 顆星'], ans: 0, exp: '【甲】內層為 range(1, x)，當 x=5 時只印 4 顆星；【乙】內層為 range(0, x)，當 x=5 時印出 5 顆星！' },
+      { id: 'c4_16', ch: 'CH4', type: 'MC', src: '核心 Q61 / 附錄A Q36', q: '比較下列兩段 while 迴圈的執行結果：\n【甲】a = 0; while a < 6: a = a * 2; print(a)\n【乙】a = 0; while a < 6: a = a + 2; print(a)', opts: ['(A) 【甲】陷入無窮迴圈，不顯示任何內容；【乙】最後印出 6', '(B) 【甲】印出 6；【乙】陷入無窮迴圈', '(C) 兩者皆印出 6', '(D) 兩者皆印出 8'], ans: 0, exp: '【甲】因 a 初始為 0，0 * 2 永遠為 0 (< 6)，陷入無窮迴圈！【乙】每次加 2，當 a 加到 6 時跳出迴圈並印出 6。' },
+      { id: 'c4_17', ch: 'CH4', type: 'MC', src: '核心 Q62 / 附錄A Q37', q: '比較下列兩段奇數累加 while 迴圈的結果：\n【甲】sum=0; x=3; while x<10: sum=sum+x; x=x+2; print(sum)\n【乙】sum=0; x=1; while x<10: sum=sum+x; x=x+2; print(sum)', opts: ['(A) 【甲】輸出 24 (3+5+7+9)；【乙】輸出 25 (1+3+5+7+9)', '(B) 兩者皆輸出 25', '(C) 兩者皆輸出 24', '(D) 【甲】輸出 20；【乙】輸出 24'], ans: 0, exp: '【甲】從 x=3 開始累加 3+5+7+9 = 24；【乙】從 x=1 開始累加 1+3+5+7+9 = 25。' },
+      { id: 'c4_18', ch: 'CH4', type: 'MC', src: '核心 Q63', q: '試問下列巢狀 while 迴圈程式碼中，輸出結果為？\nx = y = 0\nwhile x < 9:\n    x = x + 2\n    while y < 9:\n        y = y + 3\nprint(y)', opts: ['(A) 9', '(B) 10', '(C) 11', '(D) 以上皆非'], ans: 0, exp: '內層迴圈將 y 從 0 每次加 3，當 y 變成 9 時跳出內層迴圈；後續外層迴圈繼續跑時因 y 已是 9 不會再進入內層，最後印出 y = 9。' },
+      { id: 'c4_19', ch: 'CH4', type: 'MC', src: '核心 Q64-66', q: '試問下列使用 break 尋找最大公因數的程式碼，呼叫 fun(10, 15) 輸出結果為何？\ndef fun(a, b):\n    for c in range(a, 2, -1):\n        if (a % c == 0 and b % c == 0):\n            break\n    print(c)\nfun(10, 15)', opts: ['(A) 5', '(B) 10', '(C) 15', '(D) 30'], ans: 0, exp: 'c 從 10 往下遞減，當 c = 5 時，10 % 5 == 0 且 15 % 5 == 0 同時成立，觸發 break 跳出迴圈並印出 5。' },
+      { id: 'c4_20', ch: 'CH4', type: 'TF', src: 'CH04 課本觀念是非題', q: '【是非題】在迴圈執行中途，break 指令會「強迫跳離整個迴圈」；而 continue 指令則是「暫時停住不往下執行，直接跳回迴圈的起始處進行下一輪」。', opts: ['(O) 是 (True)', '(X) 否 (False)'], ans: 0, exp: '正確（True）！這是 CH04 最重要的兩個流程控制指令差異。' }
+    ];
+
+    // 記錄學員作答狀態：{ [questionId]: { selectedIdx: number, isCorrect: boolean } }
+    const userAnswers = {};
+    let currentFilter = 'ALL';
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function createQuestionCardHTML(item, indexInList, prefix) {
+      const state = userAnswers[item.id];
+      const badgeColor =
+        item.ch === 'CH1' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' :
+        item.ch === 'CH2' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' :
+        item.ch === 'CH3' ? 'bg-purple-500/20 text-purple-300 border-purple-500/30' :
+        'bg-amber-500/20 text-amber-300 border-amber-500/30';
+
+      const qLines = escapeHtml(item.q).split('\n');
+      const titleLine = qLines[0];
+      const codeLines = qLines.slice(1).join('\n');
+
+      let optionsHTML = '';
+      item.opts.forEach((optText, optIdx) => {
+        let btnClass = 'bg-slate-800/70 hover:bg-slate-800 border-slate-700 text-slate-200';
+        let icon = '';
+        if (state) {
+          if (optIdx === item.ans) {
+            btnClass = 'bg-emerald-500/25 border-emerald-400 text-emerald-200 font-bold';
+            icon = '✔ ';
+          } else if (optIdx === state.selectedIdx && !state.isCorrect) {
+            btnClass = 'bg-rose-500/25 border-rose-400 text-rose-200 line-through';
+            icon = '✘ ';
+          } else {
+            btnClass = 'bg-slate-900/50 border-slate-800 text-slate-500 opacity-70';
+          }
+        }
+        optionsHTML += `
+          <button onclick="answerExamQuestion('${item.id}', ${optIdx})" class="text-left p-2.5 rounded-lg border text-xs sm:text-sm font-mono transition ${btnClass}">
+            ${icon}${escapeHtml(optText)}
+          </button>`;
+      });
+
+      let feedbackHTML = '';
+      if (state) {
+        const correctOptText = escapeHtml(item.opts[item.ans]);
+        if (state.isCorrect) {
+          feedbackHTML = `
+            <div class="text-xs p-3 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-200 space-y-1">
+              <div class="font-bold">🎉 答對了！標準答案：${correctOptText}</div>
+              <div class="text-slate-300">${item.exp}</div>
+            </div>`;
+        } else {
+          feedbackHTML = `
+            <div class="text-xs p-3 rounded-lg bg-rose-500/15 border border-rose-500/40 text-rose-200 space-y-1">
+              <div class="font-bold">❌ 答錯囉！正確答案為：<span class="text-emerald-300 underline">${correctOptText}</span></div>
+              <div class="text-slate-300">💡 解析：${item.exp}</div>
+            </div>`;
+        }
+      }
+
+      return `
+        <div id="${prefix}-${item.id}" class="p-4 rounded-xl bg-slate-900/90 border ${state ? (state.isCorrect ? 'border-emerald-500/40' : 'border-rose-500/40') : 'border-slate-800'} space-y-3 transition">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-xs font-mono border ${badgeColor}">${item.ch}</span>
+              <span class="text-xs font-mono text-slate-400">[${item.src}]</span>
+            </div>
+            ${state ? `<span class="text-xs font-mono font-bold ${state.isCorrect ? 'text-emerald-400' : 'text-rose-400'}">${state.isCorrect ? '✔ 已答對' : '✘ 待訂正'}</span>` : '<span class="text-xs font-mono text-slate-500">尚未作答</span>'}
+          </div>
+          <div class="text-sm font-medium text-white leading-relaxed">
+            <span class="text-cyan-400 font-mono mr-1">Q${indexInList + 1}.</span>${titleLine}
+          </div>
+          ${codeLines ? `<pre class="p-3 rounded-lg bg-slate-950 border border-slate-800 text-amber-300 font-mono text-xs overflow-x-auto">${codeLines}</pre>` : ''}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            ${optionsHTML}
+          </div>
+          ${feedbackHTML}
+        </div>`;
+    }
+
+    function renderAllQuizContainers() {
+      // 1. 渲染各章節專屬題庫區
+      ['CH1', 'CH2', 'CH3', 'CH4'].forEach(ch => {
+        const container = document.getElementById(`quiz-container-${ch.toLowerCase()}`);
+        if (!container) return;
+        const list = examBank.filter(q => q.ch === ch);
+        container.innerHTML = list.map((item, idx) => createQuestionCardHTML(item, idx, `sec-${ch}`)).join('');
+      });
+
+      // 2. 渲染底部總題庫中心
+      const allContainer = document.getElementById('quiz-container-all');
+      if (allContainer) {
+        let filtered = examBank;
+        if (currentFilter === 'CH1' || currentFilter === 'CH2' || currentFilter === 'CH3' || currentFilter === 'CH4') {
+          filtered = examBank.filter(q => q.ch === currentFilter);
+        } else if (currentFilter === 'TF') {
+          filtered = examBank.filter(q => q.type === 'TF');
+        } else if (currentFilter === 'UNANSWERED') {
+          filtered = examBank.filter(q => !userAnswers[q.id]);
+        }
+        if (filtered.length === 0) {
+          allContainer.innerHTML = `<div class="p-8 rounded-2xl bg-slate-900/70 border border-slate-800 text-center text-emerald-400 font-mono">🎉 太棒了！此分類下的題目皆已作答完畢！</div>`;
+        } else {
+          allContainer.innerHTML = filtered.map((item, idx) => createQuestionCardHTML(item, idx, 'all')).join('');
+        }
+      }
+
+      // 3. 更新左側進度條與統計
+      const total = examBank.length;
+      const answeredKeys = Object.keys(userAnswers);
+      const answeredCount = answeredKeys.length;
+      const correctCount = answeredKeys.filter(k => userAnswers[k].isCorrect).length;
+      const pct = Math.round((answeredCount / total) * 100);
+      const acc = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+      document.getElementById('quiz-progress-text').textContent = `${answeredCount} / ${total} 題`;
+      document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+      document.getElementById('quiz-correct-count').textContent = `${correctCount} 題`;
+      document.getElementById('quiz-accuracy').textContent = `${acc}%`;
+    }
+
+    function answerExamQuestion(qId, selectedIdx) {
+      const item = examBank.find(q => q.id === qId);
+      if (!item) return;
+      userAnswers[qId] = {
+        selectedIdx,
+        isCorrect: selectedIdx === item.ans
+      };
+      renderAllQuizContainers();
+    }
+
+    function filterExamBank(filterType) {
+      currentFilter = filterType;
+      document.querySelectorAll('.bank-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-cyan-500', 'text-slate-950', 'font-bold');
+        btn.classList.add('bg-slate-800', 'text-slate-300');
+      });
+      const activeBtn = document.getElementById(`filter-${filterType}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-800', 'text-slate-300');
+        activeBtn.classList.add('bg-cyan-500', 'text-slate-950', 'font-bold');
+      }
+      renderAllQuizContainers();
+    }
+
+    function resetAllQuizzes() {
+      for (const k of Object.keys(userAnswers)) {
+        delete userAnswers[k];
+      }
+      renderAllQuizContainers();
+      showToast('已重置全部 85 題作答紀錄！');
+    }
+
+    // 4. 複製程式碼功能 (支援 Canvas iFrame 剪貼簿環境)
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      if (msg) toast.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2600);
+    }
+
+    function copyCode(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('已複製程式碼至剪貼簿！可以直接貼到 Spyder 執行。');
+      } catch (err) {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text).then(() => {
+            showToast('已複製程式碼至剪貼簿！可以直接貼到 Spyder 執行。');
+          });
+        }
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // 5. 下載整合範例腳本 (.py)
+    function downloadSampleScript() {
+      const c1 = document.getElementById('code-ch1').innerText;
+      const c2 = document.getElementById('code-ch2').innerText;
+      const c3Classic = document.getElementById('code-ch3-classic').innerText;
+      const c3 = document.getElementById('code-ch3').innerText;
+      const c4For = document.getElementById('code-ch4-for').innerText;
+      const c4While = document.getElementById('code-ch4-while').innerText;
+      const bonusAll = bonusExamples.map(b => b.code).join('\n\n');
+
+      const combined = `# ==========================================\n# Python 零基礎入門講義 (CH01-CH04 完整實作合集)\n# ==========================================\n\n${c1}\n\n${c2}\n\n${c3Classic}\n\n${c3}\n\n${c4For}\n\n${c4While}\n\n${bonusAll}\n`;
+      const blob = new Blob([combined], { type: 'text/x-python;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'python_ch01_to_ch04_examples.py';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // 6. 影片斷點跳題練習 Modal
+    function toggleModal(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('hidden');
+    }
+
+    function triggerCheckpoint(num) {
+      const box = document.getElementById('checkpoint-box');
+      if (num === 1) {
+        box.innerHTML = `
+          <div class="text-cyan-400 font-mono text-xs">[影片已自動暫停於 03:15] 觀念確認：</div>
+          <div class="text-white font-medium">若要將 input() 讀入的字串 "36.5" 轉為浮點數，應使用哪個函式？</div>
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button onclick="this.parentElement.innerHTML='<span class=\\'text-emerald-400 font-bold\\'>✔ 正確！使用 float(&quot;36.5&quot;)，影片繼續播放...</span>'" class="px-3 py-1.5 rounded bg-cyan-500/20 border border-cyan-500/40 text-cyan-300">float()</button>
+            <button onclick="document.getElementById('cp-hint').innerHTML='<span class=\\'text-rose-400\\'>✘ 提示：int() 無法直接轉換含小數點的字串喔！</span>'" class="px-3 py-1.5 rounded bg-slate-800 text-slate-300">int()</button>
+            <span id="cp-hint" class="text-xs ml-1"></span>
+          </div>`;
+      } else if (num === 2) {
+        box.innerHTML = `
+          <div class="text-emerald-400 font-mono text-xs">[影片已自動暫停於 08:40] 觀念確認：</div>
+          <div class="text-white font-medium">在邏輯運算子中，not、and、or 誰的優先順序最高？</div>
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button onclick="this.parentElement.innerHTML='<span class=\\'text-emerald-400 font-bold\\'>✔ 正確！順序為 not ➔ and ➔ or，影片繼續播放...</span>'" class="px-3 py-1.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300">not 最高</button>
+            <button onclick="document.getElementById('cp-hint').innerHTML='<span class=\\'text-rose-400\\'>✘ 提示：not 的優先順序高於 and 與 or 喔！</span>'" class="px-3 py-1.5 rounded bg-slate-800 text-slate-300">and 最高</button>
+            <span id="cp-hint" class="text-xs ml-1"></span>
+          </div>`;
+      } else {
+        box.innerHTML = `
+          <div class="text-purple-400 font-mono text-xs">[影片已自動暫停於 14:20] 觀念確認：</div>
+          <div class="text-white font-medium">在 if-elif-else 中，若第一個 if 已經成立，後面的 elif 還會被檢查嗎？</div>
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button onclick="this.parentElement.innerHTML='<span class=\\'text-emerald-400 font-bold\\'>✔ 正確！具有互斥性，一旦成立就會跳出整個分支結構。</span>'" class="px-3 py-1.5 rounded bg-purple-500/20 border border-purple-500/40 text-purple-300">不會，直接跳出</button>
+            <button onclick="document.getElementById('cp-hint').innerHTML='<span class=\\'text-rose-400\\'>✘ 提示：elif 只有在前面的條件都不成立時才會檢查。</span>'" class="px-3 py-1.5 rounded bg-slate-800 text-slate-300">會繼續檢查</button>
+            <span id="cp-hint" class="text-xs ml-1"></span>
+          </div>`;
+      }
+    }
+
+    // 7. Scrollspy 滾動監聽
+    window.addEventListener('scroll', () => {
+      const sections = ['ch1', 'ch2', 'ch3', 'ch4', 'all-exams'];
+      let current = 'ch1';
+      for (const sec of sections) {
+        const el = document.getElementById(sec);
+        if (el && window.scrollY >= el.offsetTop - 200) {
+          current = sec;
+        }
+      }
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('nav-active');
+        if (link.getAttribute('data-section') === current) {
+          link.classList.add('nav-active');
+        }
+      });
+    });
+
+    // 初始化所有互動元件與 85 題認證題庫
+    runFundSimulator();
+    runCh3Simulator();
+    updateRangeVisualizer();
+    switchExTab(0);
+    renderAllQuizContainers();
+  </script>
+</body>
+</html>
